@@ -1,12 +1,14 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { createUser } from "../../api/UsersApi";
 
 const RegisterPage: React.FC = () => {
   const navigate = useNavigate();
   const [form, setForm] = useState({
-    nombre: '',
-    email: '',
-    password: '',
+    nombre: "",
+    email: "",
+    password: "",
   });
 
   // Maneja los cambios en los inputs
@@ -19,12 +21,19 @@ const RegisterPage: React.FC = () => {
   };
 
   // Maneja el envío del formulario
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // Lógica de registro (llamada al backend, validaciones, etc.)
-    console.log('Registrando usuario con:', form);
-    // Redirige a donde desees, por ejemplo:
-    // navigate('/home');
+    if (!form.email || !form.password || !form.nombre) {
+      toast.error("Todos los campos son obligatorios");
+      return;
+    }
+    const everythingOk = await createUser(form);
+    if (everythingOk) {
+      toast.success("Usuario creado correctamente");
+      navigate("/");
+      return;
+    }
+    toast.error("No se pudo crear el usuario");
   };
 
   return (
@@ -43,7 +52,10 @@ const RegisterPage: React.FC = () => {
         </h2>
         <form onSubmit={handleSubmit} className="space-y-5">
           <div>
-            <label htmlFor="nombre" className="block text-gray-700 font-medium mb-1">
+            <label
+              htmlFor="nombre"
+              className="block text-gray-700 font-medium mb-1"
+            >
               Nombre
             </label>
             <input
@@ -52,12 +64,14 @@ const RegisterPage: React.FC = () => {
               type="text"
               value={form.nombre}
               onChange={handleInputChange}
-              required
               className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500"
             />
           </div>
           <div>
-            <label htmlFor="email" className="block text-gray-700 font-medium mb-1">
+            <label
+              htmlFor="email"
+              className="block text-gray-700 font-medium mb-1"
+            >
               Correo Electrónico
             </label>
             <input
@@ -66,12 +80,14 @@ const RegisterPage: React.FC = () => {
               type="email"
               value={form.email}
               onChange={handleInputChange}
-              required
               className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500"
             />
           </div>
           <div>
-            <label htmlFor="password" className="block text-gray-700 font-medium mb-1">
+            <label
+              htmlFor="password"
+              className="block text-gray-700 font-medium mb-1"
+            >
               Contraseña
             </label>
             <input
@@ -80,7 +96,6 @@ const RegisterPage: React.FC = () => {
               type="password"
               value={form.password}
               onChange={handleInputChange}
-              required
               className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500"
             />
           </div>
@@ -92,7 +107,7 @@ const RegisterPage: React.FC = () => {
           </button>
         </form>
         <p className="mt-4 text-center text-gray-600 text-sm">
-          ¿Ya tienes una cuenta?{' '}
+          ¿Ya tienes una cuenta?{" "}
           <a href="/auth/login" className="text-gray-800 underline">
             Inicia Sesión
           </a>
