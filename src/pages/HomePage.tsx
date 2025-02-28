@@ -1,6 +1,8 @@
 // src/pages/HomePage.tsx
 import React from 'react';
 import Carousel from '../components/Carousel';
+import SubastasSeccion from'../components/SubastasSeccion';
+import Footer from '../components/Footer';
 
 const HomePage: React.FC = () => {
   const heroImage = 'https://picsum.photos/id/1018/1600/900';
@@ -60,7 +62,7 @@ const HomePage: React.FC = () => {
     <div className="min-h-screen bg-gray-200">
       {/* Sección Hero */}
       <div
-        className="bg-cover bg-center h-150 flex items-center justify-center mb-4"
+        className="bg-cover bg-center h-96 flex items-center justify-center mb-4"
         style={{ backgroundImage: `url(${heroImage})` }}
       >
         <div className="bg-gray-800 bg-opacity-50 p-6 rounded">
@@ -73,7 +75,6 @@ const HomePage: React.FC = () => {
         </div>
       </div>
 
-
       {/* Sección de Obras Destacadas: Carousel */}
       <div className="py-12 px-16">
         <h2 className="text-3xl font-serif text-gray-800 text-center mb-8">
@@ -81,6 +82,9 @@ const HomePage: React.FC = () => {
         </h2>
         <Carousel artworks={featuredArtworks} />
       </div>
+
+      {/* Sección de Próximas Subastas */}
+      <SubastasSeccion />
 
       {/* Sección en Grid de Obras */}
       <div className="py-12 px-16">
@@ -110,6 +114,7 @@ const HomePage: React.FC = () => {
           ))}
         </div>
       </div>
+      <Footer />
     </div>
   );
 };
