@@ -1,5 +1,11 @@
 import axios, { isAxiosError } from "axios";
-import { LoginType, newUserDataType, UpdateUserType, UserType } from "../types";
+import {
+  LoginType,
+  newUserDataType,
+  UpdateUserType,
+  UserType,
+  expo,
+} from "../types";
 //Esto es lo de el .env
 const API_URL = import.meta.env.VITE_BACKEND_URL;
 
@@ -39,6 +45,18 @@ export async function updateUser(id: number, userData: UpdateUserType) {
       );
     } else {
       throw new Error("Error de conexión con el servidor");
+    }
+  }
+}
+
+export async function createExpo(dataexpo: expo) {
+  try {
+    const url = `${API_URL}/exposicions`;
+    const { data } = await axios.post<expo>(url, dataexpo);
+    return data;
+  } catch (error) {
+    if (isAxiosError(error) && error.response) {
+      throw new Error(error.response.data.error || "expo no creada");
     }
   }
 }

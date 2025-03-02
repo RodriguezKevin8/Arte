@@ -16,3 +16,10 @@ export type UpdateUserType = {
   email?: string;
   password?: string;
 };
+
+export type expo = {
+  titulo: string;
+  descripcion: string;
+  fechaInauguracion: string;
+  fechaClausura: string;
+};
