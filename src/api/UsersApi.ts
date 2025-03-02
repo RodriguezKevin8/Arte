@@ -1,5 +1,5 @@
 import axios, { isAxiosError } from "axios";
-import { LoginType, newUserDataType, UserType } from "../types";
+import { LoginType, newUserDataType, UpdateUserType, UserType } from "../types";
 //Esto es lo de el .env
 const API_URL = import.meta.env.VITE_BACKEND_URL;
 
@@ -22,8 +22,20 @@ export async function Login(loginData: LoginType) {
     return data;
   } catch (error) {
     if (isAxiosError(error) && error.response) {
+      throw new Error(error.response.data.error || "Usuario no encontrado");
+    }
+  }
+}
+// Esta función actualiza un usuario
+export async function updateUser(id: number, userData: UpdateUserType) {
+  try {
+    const url = `${API_URL}/usuarios/${id}`;
+    const { data } = await axios.put(url, userData);
+    return data;
+  } catch (error) {
+    if (isAxiosError(error) && error.response) {
       throw new Error(
-        error.response.data.error || "Error al realizar el login"
+        error.response.data.error || "Error al actualizar el usuario"
       );
     }
   }

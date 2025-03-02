@@ -1,60 +1,60 @@
 // src/pages/HomePage.tsx
-import React from 'react';
-import Carousel from '../components/Carousel';
-import SubastasSeccion from'../components/SubastasSeccion';
-import Footer from '../components/Footer';
+import React from "react";
+import Carousel from "../components/Carousel";
+import SubastasSeccion from "../components/SubastasSeccion";
+import Footer from "../components/Footer";
 
 const HomePage: React.FC = () => {
-  const heroImage = 'https://picsum.photos/id/1018/1600/900';
+  const heroImage = "https://picsum.photos/id/1018/1600/900";
 
   const featuredArtworks = [
     {
       id: 1,
-      title: 'Obra Maestra 1',
-      imageUrl: 'https://picsum.photos/id/1025/800/600',
+      title: "Obra Maestra 1",
+      imageUrl: "https://picsum.photos/id/1025/800/600",
     },
     {
       id: 2,
-      title: 'Obra Maestra 2',
-      imageUrl: 'https://picsum.photos/id/1035/800/600',
+      title: "Obra Maestra 2",
+      imageUrl: "https://picsum.photos/id/1035/800/600",
     },
     {
       id: 3,
-      title: 'Obra Maestra 3',
-      imageUrl: 'https://picsum.photos/id/1043/800/600',
+      title: "Obra Maestra 3",
+      imageUrl: "https://picsum.photos/id/1043/800/600",
     },
   ];
 
   const moreArtworks = [
     {
       id: 4,
-      title: 'Obra Maestra 4',
-      imageUrl: 'https://picsum.photos/id/1050/800/600',
+      title: "Obra Maestra 4",
+      imageUrl: "https://picsum.photos/id/1050/800/600",
     },
     {
       id: 5,
-      title: 'Obra Maestra 5',
-      imageUrl: 'https://picsum.photos/id/1060/800/600',
+      title: "Obra Maestra 5",
+      imageUrl: "https://picsum.photos/id/1060/800/600",
     },
     {
       id: 6,
-      title: 'Obra Maestra 6',
-      imageUrl: 'https://picsum.photos/id/1070/800/600',
+      title: "Obra Maestra 6",
+      imageUrl: "https://picsum.photos/id/1070/800/600",
     },
     {
       id: 7,
-      title: 'Obra Maestra 7',
-      imageUrl: 'https://picsum.photos/id/1080/800/600',
+      title: "Obra Maestra 7",
+      imageUrl: "https://picsum.photos/id/1080/800/600",
     },
     {
       id: 8,
-      title: 'Obra Maestra 8',
-      imageUrl: 'https://picsum.photos/id/1090/800/600',
+      title: "Obra Maestra 8",
+      imageUrl: "https://picsum.photos/id/1090/800/600",
     },
     {
       id: 9,
-      title: 'Obra Maestra 9',
-      imageUrl: 'https://picsum.photos/id/110/800/600',
+      title: "Obra Maestra 9",
+      imageUrl: "https://picsum.photos/id/110/800/600",
     },
   ];
 
@@ -107,7 +107,8 @@ const HomePage: React.FC = () => {
                   {art.title}
                 </h3>
                 <p className="text-gray-600 text-sm">
-                  Una descripción breve de la obra que resalta sus características.
+                  Una descripción breve de la obra que resalta sus
+                  características.
                 </p>
               </div>
             </div>

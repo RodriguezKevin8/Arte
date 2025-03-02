@@ -1,10 +1,11 @@
-import { createBrowserRouter, Outlet } from "react-router-dom";
+import { createBrowserRouter } from "react-router-dom";
 import ErrorPage from "./pages/ErrorPage";
 import MainLayout from "./Layouts/MainLayout";
-import LoginLayout from "./Layouts/LoginLayout";
 import HomePage from "./pages/HomePage";
 import LoginPage from "./pages/LoginRegister/LoginPage";
 import RegisterPage from "./pages/LoginRegister/Register";
+import AuthRouteProtection from "./helpers/AuthRouteProtection";
+import ProfilePage from "./pages/ProfilePage";
 
 export const router = createBrowserRouter([
   {
@@ -17,14 +18,18 @@ export const router = createBrowserRouter([
         element: <HomePage />,
       },
       {
-        path: "/ejemplo",
-        element:  <h1>hola soy un ejemplo</h1>
+        path: "/obras",
+        element: <h1>hola soy un ejemplo</h1>,
+      },
+      {
+        path: "/perfil",
+        element: <ProfilePage />,
       },
     ],
   },
   {
     path: "/auth",
-    element: <LoginLayout />, 
+    element: <AuthRouteProtection />,
     children: [
       {
         path: "login", // Esto crea la ruta /auth/login
@@ -32,8 +37,8 @@ export const router = createBrowserRouter([
       },
       {
         path: "register",
-        element: <RegisterPage />
-      }
+        element: <RegisterPage />,
+      },
     ],
   },
 ]);

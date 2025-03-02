@@ -10,3 +10,9 @@ export type UserType = {
   email: string;
 };
 export type LoginType = Omit<newUserDataType, "nombre">;
+
+export type UpdateUserType = {
+  nombre?: string;
+  email?: string;
+  password?: string;
+};

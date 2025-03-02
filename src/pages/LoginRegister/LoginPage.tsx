@@ -30,21 +30,33 @@ const LoginPage: React.FC = () => {
       toast.warn("Todos los campos son obligatorios");
       return;
     }
-    //Acá esta la respuesta
-    const everyThingOk = await Login(form);
-    //Sino la trae pasa esto (Despliega un mensaje)
-    if (!everyThingOk) {
-      toast.error("Ups... Algo salio mal");
-      return;
+    try {
+      // Intenta hacer el login
+      const everyThingOk = await Login(form);
+      if (!everyThingOk) {
+        toast.error("Algo salio mal");
+        return;
+      }
+      // Si el login es exitoso, muestra un mensaje de todo bien papu y redirige
+      toast.success(
+        "Bienvenido a la galería de arte " +
+          (everyThingOk?.nombre || "") +
+          ". Ten un buen día"
+      );
+      //Esto lo setea para que este disponible en toda la app
+      setUser(everyThingOk!);
+      //Setea el valor en el local storage y lo convierte a string porque el local storage solo recibe texto
+      localStorage.setItem("userData", JSON.stringify(everyThingOk));
+      //te lleva al inicio (negro)
+      navigate("/");
+    } catch (error) {
+      // Captura el error y muestra el mensaje
+      if (error instanceof Error) {
+        toast.error(error.message || "Ups... Algo salió mal");
+      } else {
+        toast.error("Ups... Algo salió mal");
+      }
     }
-    //Si todo sale bien sigue y hace esto
-    toast.success(
-      "Bienvenido a la galería de arte " +
-        (everyThingOk?.nombre || "") +
-        ". Ten un buen dia"
-    );
-    setUser(everyThingOk!);
-    navigate("/");
   };
 
   return (
