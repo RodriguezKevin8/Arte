@@ -70,14 +70,31 @@ export default function ProfilePage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Formulario de perfil */}
-      <div className="max-w-2xl mx-auto p-6 bg-white shadow-lg rounded-lg mt-8 border border-gray-200">
-        <h2 className="text-3xl font-serif text-gray-800 mb-6 text-center">
+    <div className="min-h-screen bg-gray-100 flex flex-col items-center">
+      {/* Imagen de Portada */}
+      <div
+        className="w-full h-56 bg-cover bg-center"
+        style={{
+          backgroundImage:
+            "url(https://picsum.photos/seed/profilecover/1600/400)",
+        }}
+      ></div>
+
+      {/* Tarjeta de Perfil con Avatar superpuesto */}
+      <div className="relative -mt-16 max-w-2xl w-full bg-white shadow-2xl rounded-lg border border-gray-200 p-6">
+        {/* Avatar */}
+        <div className="absolute -top-12 left-1/2 transform -translate-x-1/2">
+          <img
+            src="/logoart.jpg"
+            alt="Avatar"
+            className="w-24 h-24 object-cover rounded-full border-4 border-white shadow-md"
+          />
+        </div>
+        <h2 className="mt-16 text-3xl font-serif text-gray-800 text-center mb-6 border-b pb-2">
           Perfil de Usuario
         </h2>
-        <form onSubmit={handleSubmit} className="space-y-5">
-          {/* Campo para el nombre */}
+        <form onSubmit={handleSubmit} className="space-y-5 p-4">
+          {/* Campo Nombre */}
           <div>
             <label
               htmlFor="nombre"
@@ -92,13 +109,13 @@ export default function ProfilePage() {
               type="text"
               value={form.nombre}
               onChange={handleInputChange}
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500"
-              placeholder={user.nombre ? "" : "Ingresa tu nombre"}
+              placeholder="Ingresa tu nombre"
               required
+              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500"
             />
           </div>
 
-          {/* Campo para el email */}
+          {/* Campo Email */}
           <div>
             <label
               htmlFor="email"
@@ -113,13 +130,13 @@ export default function ProfilePage() {
               type="email"
               value={form.email}
               onChange={handleInputChange}
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500"
-              placeholder={user.email ? "" : "Ingresa tu email"}
+              placeholder="Ingresa tu email"
               required
+              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500"
             />
           </div>
 
-          {/* Campo para la contraseña */}
+          {/* Campo Contraseña */}
           <div>
             <label
               htmlFor="password"
@@ -134,22 +151,33 @@ export default function ProfilePage() {
               type="password"
               value={form.password}
               onChange={handleInputChange}
+              placeholder="Ingresa tu nueva contraseña"
               className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500"
             />
           </div>
 
-          {/* Botón de envío */}
+          {/* Botón de Envío */}
           <button
             type="submit"
-            className={`w-full py-2 ${
-              hasChanges ? "bg-gray-800" : "bg-gray-400 cursor-not-allowed"
-            } text-white rounded-md hover:bg-gray-900 transition flex items-center justify-center`}
             disabled={!hasChanges}
+            className={`w-full py-2 flex items-center justify-center text-white rounded-md transition ${
+              hasChanges
+                ? "bg-gray-800 hover:bg-gray-900"
+                : "bg-gray-400 cursor-not-allowed"
+            }`}
           >
             <FaUser className="mr-2" />
             Actualizar Perfil
           </button>
         </form>
+      </div>
+
+      {/* Pie de Página Opcional para el Perfil */}
+      <div className="mt-8 text-center text-gray-600 text-sm">
+        <p>
+          Mantén tu información actualizada para recibir mejores ofertas y
+          novedades.
+        </p>
       </div>
     </div>
   );

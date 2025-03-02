@@ -6,6 +6,7 @@ import LoginPage from "./pages/LoginRegister/LoginPage";
 import RegisterPage from "./pages/LoginRegister/Register";
 import AuthRouteProtection from "./helpers/AuthRouteProtection";
 import ProfilePage from "./pages/ProfilePage";
+import Obras from "./pages/Obras";
 
 export const router = createBrowserRouter([
   {
@@ -19,7 +20,7 @@ export const router = createBrowserRouter([
       },
       {
         path: "/obras",
-        element: <h1>hola soy un ejemplo</h1>,
+        element: <Obras />,
       },
       {
         path: "/perfil",

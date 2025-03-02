@@ -25,6 +25,9 @@ export default function NavBar() {
 
       {/* Enlaces de navegación */}
       <div className="flex items-center space-x-4">
+        <Link to="/obras" className="text-lg font-serif text-white">
+          Obras
+        </Link>
         {user.id !== 0 ? (
           <>
             <Link
