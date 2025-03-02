@@ -18,14 +18,10 @@ export const GlobalProvider = ({ children }: GlobalroviderProps) => {
   const [user, setUser] = useState<UserType>({ id: 0, nombre: "", email: "" });
   // Uso useEffect para cargar los datos del localStorage solo una vez, porque si queda asi chulon cae en un bucle infinito(negro)
   useEffect(() => {
-    //Acá se saca del localStorage, si te preguntas el porque se almacena ahi es para que no se borre al recargar y otras vainas peron el mensaje ya esta largo
     const userData = localStorage.getItem("userData");
-    //Si habia algo ahi se setean esos datos en el estado, lo pasas a JSON porque el localStorage solo recibe textos
     if (userData) {
       setUser(JSON.parse(userData));
-      return;
     }
-    return;
   }, []);
 
   return (

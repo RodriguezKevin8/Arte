@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from "react"; // Añade useEffect
+import React, { useState, useEffect } from "react";
 import { useGlobalContext } from "../hooks/useGlobalContext";
 import { toast } from "react-toastify";
 import { updateUser } from "../api/UsersApi";
 import { FaUser, FaEnvelope, FaLock } from "react-icons/fa";
+import { UpdateUserType } from "../types";
 
 export default function ProfilePage() {
   const { user, setUser } = useGlobalContext();
@@ -19,7 +20,7 @@ export default function ProfilePage() {
       email: user.email,
       password: "",
     });
-  }, [user]); // Este efecto se ejecuta cada vez que `user` cambia
+  }, [user]);
 
   // Maneja los cambios en los inputs
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -40,36 +41,30 @@ export default function ProfilePage() {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    // Validación: No permitir campos vacíos (excepto la contraseña)
-    if (!form.nombre || !form.email) {
-      toast.warn("Nombre y correo electrónico son obligatorios");
-      return;
-    }
+    // Crea un objeto con solo los campos que han cambiado
+    const updatedData: UpdateUserType = {};
+    if (form.nombre.trim() && form.nombre !== user.nombre)
+      updatedData.nombre = form.nombre;
+    if (form.email.trim() && form.email !== user.email)
+      updatedData.email = form.email;
+    if (form.password.trim()) updatedData.password = form.password;
 
-    // Si no hay cambios, muestra un mensaje y no hace la solicitud
-    if (!hasChanges) {
+    // Si no hay cambios, mostrar mensaje y salir
+    if (Object.keys(updatedData).length === 0) {
       toast.info("No hay cambios para guardar");
       return;
     }
 
     try {
-      // Llama a la función updateUser para actualizar los datos
-      const updatedUser = await updateUser(user.id, {
-        nombre: form.nombre,
-        email: form.email,
-        password: form.password || undefined, // Solo envía la contraseña si se proporciona
-      });
-
-      // Actualiza el estado global del usuario
+      const updatedUser = await updateUser(user.id, updatedData);
       setUser(updatedUser);
 
-      // Muestra un mensaje de éxito
-      toast.success("Perfil actualizado correctamente");
+      // Guardar los datos actualizados en el localStorage
+      localStorage.setItem("userData", JSON.stringify(updatedUser));
 
-      // Limpia el campo de la contraseña después de la actualización
-      setForm((prev) => ({ ...prev, password: "" }));
+      toast.success("Perfil actualizado correctamente");
+      setForm((prev) => ({ ...prev, password: "" })); // Limpia la contraseña
     } catch (error) {
-      // Muestra un mensaje de error si algo sale mal
       toast.error(error.message || "Error al actualizar el perfil");
     }
   };

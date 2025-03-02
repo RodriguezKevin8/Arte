@@ -37,8 +37,8 @@ export default function NavBar() {
             <button
               onClick={() => {
                 localStorage.removeItem("userData");
-                window.location.reload();
                 navigate("/");
+                window.location.reload();
               }}
               className="px-4 py-2 bg-white text-gray-800 font-serif rounded cursor-pointer transition hover:bg-red-500 flex items-center space-x-2 hover:scale-110 hover:text-white"
             >

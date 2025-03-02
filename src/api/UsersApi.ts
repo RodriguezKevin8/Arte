@@ -30,13 +30,15 @@ export async function Login(loginData: LoginType) {
 export async function updateUser(id: number, userData: UpdateUserType) {
   try {
     const url = `${API_URL}/usuarios/${id}`;
-    const { data } = await axios.put(url, userData);
+    const { data } = await axios.patch<UserType>(url, userData);
     return data;
   } catch (error) {
     if (isAxiosError(error) && error.response) {
       throw new Error(
         error.response.data.error || "Error al actualizar el usuario"
       );
+    } else {
+      throw new Error("Error de conexión con el servidor");
     }
   }
 }
