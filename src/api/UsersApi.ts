@@ -1,5 +1,5 @@
 import axios, { isAxiosError } from "axios";
-import { newUserDataType } from "../types";
+import { LoginType, newUserDataType, UserType } from "../types";
 //Esto es lo de el .env
 const API_URL = import.meta.env.VITE_BACKEND_URL;
 
@@ -12,6 +12,19 @@ export async function createUser(userData: newUserDataType) {
   } catch (error) {
     if (isAxiosError(error) && error.response) {
       throw new Error(error.response.data.error || "Error al crear el usuario");
+    }
+  }
+}
+export async function Login(loginData: LoginType) {
+  try {
+    const url = `${API_URL}/usuarios/login`;
+    const { data } = await axios.post<UserType>(url, loginData);
+    return data;
+  } catch (error) {
+    if (isAxiosError(error) && error.response) {
+      throw new Error(
+        error.response.data.error || "Error al realizar el login"
+      );
     }
   }
 }

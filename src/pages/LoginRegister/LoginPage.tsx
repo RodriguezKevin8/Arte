@@ -1,12 +1,16 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { Login } from "../../api/UsersApi";
+import { useGlobalContext } from "../../hooks/useGlobalContext";
 
 const LoginPage: React.FC = () => {
+  const { setUser } = useGlobalContext();
   const navigate = useNavigate();
 
   const [form, setForm] = useState({
-    email: '',
-    password: '',
+    email: "",
+    password: "",
   });
 
   // Maneja los cambios de los inputs
@@ -19,11 +23,28 @@ const LoginPage: React.FC = () => {
   };
 
   // Maneja el envío del formulario
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    // Lógica de autenticación aquí
-    console.log('Iniciando sesión con:', form);
-    // navigate('/home');
+    // Esto ve que los campos no vayan vacios
+    if (!form.email || !form.password) {
+      toast.warn("Todos los campos son obligatorios");
+      return;
+    }
+    //Acá esta la respuesta
+    const everyThingOk = await Login(form);
+    //Sino la trae pasa esto (Despliega un mensaje)
+    if (!everyThingOk) {
+      toast.error("Ups... Algo salio mal");
+      return;
+    }
+    //Si todo sale bien sigue y hace esto
+    toast.success(
+      "Bienvenido a la galería de arte " +
+        (everyThingOk?.nombre || "") +
+        ". Ten un buen dia"
+    );
+    setUser(everyThingOk!);
+    navigate("/");
   };
 
   return (
@@ -54,7 +75,6 @@ const LoginPage: React.FC = () => {
               type="email"
               value={form.email}
               onChange={handleInputChange}
-              required
               className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500"
             />
           </div>
@@ -71,7 +91,6 @@ const LoginPage: React.FC = () => {
               type="password"
               value={form.password}
               onChange={handleInputChange}
-              required
               className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500"
             />
           </div>
