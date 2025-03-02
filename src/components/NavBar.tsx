@@ -52,7 +52,7 @@ export default function NavBar() {
         ) : (
           <Link
             to="/auth/login"
-            className="px-4 py-2 bg-white text-gray-800 font-serif rounded hover:bg-gray-100 transition-colors"
+            className="px-4 py-2 bg-white text-gray-800 font-serif rounded hover:bg-gray-200 transition-colors"
           >
             Iniciar Sesión
           </Link>
