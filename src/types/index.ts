@@ -43,8 +43,7 @@ export interface ObraDTO {
   exposicion: number;
   propietario: number;
 }
-
-export type ObraDeArte = {
+export interface Work {
   id: number;
   titulo: string;
   estilo: string;
@@ -54,7 +53,7 @@ export type ObraDeArte = {
   exposicion: number;
   fechaCreacion: string;
   propietario: number;
-};
+}
 export type ObraDeArteDetalladaType = {
   id: number;
   titulo: string;
