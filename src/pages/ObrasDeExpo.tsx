@@ -8,6 +8,7 @@ import {
 import { ObraDTO } from "../types";
 import { useGlobalContext } from "../hooks/useGlobalContext";
 import { toast } from "react-toastify";
+import { AiOutlineClose, AiOutlineCheck } from "react-icons/ai";
 
 interface FormDataType {
   titulo: string;
@@ -105,103 +106,80 @@ export default function ObrasDeExpo() {
   };
 
   return (
-    <div className="w-full px-[100px] py-6 relative  bg-gray-200 min-h-[92vh]">
-      <div className="absolute top-6 right-6">
-        <button
-          onClick={openModal}
-          className="bg-blue-950 text-white px-4 py-2 rounded-md text-lg hover:bg-green-600 transition duration-300"
-        >
-          Agregar tu obra de arte
-        </button>
-      </div>
-
-      {/* Modal */}
+    <div className="w-full px-[100px] py-6 relative bg-gray-200 min-h-[92vh]">
+      {/* Modal para Agregar Obra */}
       {showModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-          <div className="bg-white p-6 rounded-lg w-[400px] shadow-xl">
-            <h3 className="text-2xl mb-4 text-center text-gray-800">
-              Agregar Obra
-            </h3>
-            <form onSubmit={handleSubmit}>
-              <div className="mb-4">
-                <label
-                  htmlFor="titulo"
-                  className="block text-sm font-medium text-gray-700"
-                >
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-md animate-fadeIn">
+          <div className="bg-white p-8 rounded-2xl shadow-2xl w-full max-w-lg transform scale-95 animate-scaleIn">
+            {/* Header */}
+            <div className="flex justify-between items-center mb-6">
+              <h2 className="text-2xl font-bold text-gray-900">Agregar Obra</h2>
+              <button
+                onClick={closeModal}
+                className="text-gray-600 hover:text-red-500 transition duration-300 text-2xl"
+              >
+                <AiOutlineClose />
+              </button>
+            </div>
+
+            {/* Formulario */}
+            <form onSubmit={handleSubmit} className="space-y-6">
+              <div>
+                <label className="block text-gray-700 font-medium mb-1">
                   Título
                 </label>
                 <input
                   type="text"
-                  id="titulo"
                   name="titulo"
                   value={formData.titulo}
                   onChange={handleChange}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-md"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:outline-none transition-all"
                   required
                 />
               </div>
-              <div className="mb-4">
-                <label
-                  htmlFor="estilo"
-                  className="block text-sm font-medium text-gray-700"
-                >
+              <div>
+                <label className="block text-gray-700 font-medium mb-1">
                   Estilo
                 </label>
                 <input
                   type="text"
-                  id="estilo"
                   name="estilo"
                   value={formData.estilo}
                   onChange={handleChange}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-md"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:outline-none transition-all"
                   required
                 />
               </div>
-              <div className="mb-4">
-                <label
-                  htmlFor="precioSalida"
-                  className="block text-sm font-medium text-gray-700"
-                >
+              <div>
+                <label className="block text-gray-700 font-medium mb-1">
                   Precio de salida
                 </label>
                 <input
                   type="number"
-                  id="precioSalida"
                   name="precioSalida"
                   value={formData.precioSalida}
                   onChange={handleChange}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-md"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:outline-none transition-all"
                   required
                 />
               </div>
-              <div className="mb-4">
-                <label
-                  htmlFor="imagen"
-                  className="block text-sm font-medium text-gray-700"
-                >
+              <div>
+                <label className="block text-gray-700 font-medium mb-1">
                   Imagen de la obra
                 </label>
                 <input
                   type="file"
-                  id="imagen"
                   name="imagen"
                   onChange={handleFileChange}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-md"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:outline-none transition-all"
                 />
               </div>
-              <div className="flex justify-end">
-                <button
-                  type="button"
-                  onClick={closeModal}
-                  className="bg-gray-500 text-white px-4 py-2 rounded-md mr-2"
-                >
-                  Cancelar
-                </button>
+              <div className="flex justify-end space-x-4">
                 <button
                   type="submit"
-                  className="bg-blue-500 text-white px-4 py-2 rounded-md"
+                  className="flex items-center justify-center w-full bg-gray-800 text-white px-4 py-3 rounded-lg hover:bg-gray-900 transition-all duration-300 text-lg font-medium shadow-md"
                 >
-                  Agregar
+                  <AiOutlineCheck className="mr-2 text-xl" /> Agregar
                 </button>
               </div>
             </form>
@@ -209,41 +187,68 @@ export default function ObrasDeExpo() {
         </div>
       )}
 
-      <h2 className="text-3xl font-serif text-gray-800 text-center mb-8">
-        Obras de la Exposición
-      </h2>
-
-      <div className="grid grid-cols-3 gap-[60px] mt-5">
-        {obras.map((obra, i) => (
-          <div
-            key={obra.id}
-            className="bg-white shadow-md rounded-lg overflow-hidden transform transition duration-300 hover:scale-105 hover:shadow-2xl"
-          >
-            <img
-              src={
-                obra.imagenUrl || `https://picsum.photos/536/354?random=${i}`
-              }
-              alt="imagen"
-            />
-            <div className="p-4">
-              <h3 className="font-serif text-xl text-gray-800 mb-2">
-                {obra.titulo}
-              </h3>
-              <p className="text-gray-700 text-sm">Estilo: {obra.estilo}</p>
-              <p className="text-gray-700 text-sm">
-                Precio de salida: ${obra.precioSalida}
-              </p>
-              {obra.propietario === user.id && (
-                <button
-                  onClick={() => handleDelete(obra.id)}
-                  className="mt-2 bg-red-400 text-white px-4 py-2 rounded-md hover:bg-red-700 transition duration-300 w-full"
-                >
-                  Eliminar obra
-                </button>
-              )}
+      <div className="py-12">
+        <header className="flex w-full items-center">
+          {user.id !== 0 && (
+            <div className="w-auto flex justify-center py-2">
+              <button
+                onClick={openModal}
+                className="bg-gray-800 text-white px-6 py-3 rounded-lg hover:bg-gray-900 transition-colors shadow-md"
+              >
+                Agregar tu obra de arte
+              </button>
             </div>
-          </div>
-        ))}
+          )}
+          <h2 className="w-[75%] text-3xl font-serif text-gray-800 text-center mb-8">
+            Obras de la Exposición
+          </h2>
+        </header>
+
+        <div className="grid grid-cols-3 gap-[60px] mt-5">
+          {obras.length > 0 ? (
+            obras.map((obra, i) => (
+              <div
+                key={obra.id}
+                className="bg-white shadow-md rounded-lg overflow-hidden transform transition duration-300 hover:scale-105 hover:shadow-2xl cursor-pointer flex flex-col"
+              >
+                <img
+                  src={
+                    obra.imagenUrl ||
+                    `https://picsum.photos/536/354?random=${i}`
+                  }
+                  alt="imagen de obra"
+                />
+                <div className="p-2 flex flex-col flex-grow">
+                  <h3 className="font-serif text-xl text-gray-800 mb-2">
+                    {obra.titulo}
+                  </h3>
+                  <p className="text-gray-700 text-sm">Estilo: {obra.estilo}</p>
+                  <p className="text-gray-700 text-sm">
+                    Precio de salida: ${obra.precioSalida}
+                  </p>
+                  {obra.propietario === user.id && (
+                    <button
+                      onClick={() => handleDelete(obra.id)}
+                      className="mt-auto bg-red-400 text-white px-4 py-2 rounded-md hover:bg-red-700 transition duration-300 w-full"
+                    >
+                      Eliminar obra
+                    </button>
+                  )}
+                </div>
+              </div>
+            ))
+          ) : (
+            <div className="flex flex-col items-center justify-center mt-10 p-8 bg-gray-100 rounded-lg shadow-md">
+              <h3 className="text-2xl font-semibold text-gray-700">
+                No hay obras disponibles
+              </h3>
+              <p className="text-gray-600 text-center mt-2">
+                Actualmente no hay obras disponibles. ¡Vuelve más tarde para
+                descubrir nuevas obras!
+              </p>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
