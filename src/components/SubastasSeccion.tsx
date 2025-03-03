@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom"; // Importa el hook de navegación
 import { getAllExpositions } from "../api/ExpositionsApi";
 import { toast } from "react-toastify";
 import { Exposition } from "../types";
 import { FaExclamationTriangle } from "react-icons/fa";
 
 export default function UpcomingAuctions() {
-  // Estado para almacenar las exposiciones
   const [expositions, setExpositions] = useState<Exposition[]>([]);
+  const navigate = useNavigate(); // Hook para redirigir
 
   useEffect(() => {
     const getExpositionsFromApi = async () => {
@@ -24,7 +25,7 @@ export default function UpcomingAuctions() {
     };
 
     getExpositionsFromApi();
-  }, []); // Dependencia vacía para evitar bucles infinitos
+  }, []);
 
   return (
     <div className="py-12 px-16 bg-white shadow-md rounded-lg my-8">
@@ -47,8 +48,13 @@ export default function UpcomingAuctions() {
                 <h3 className="font-serif text-xl text-gray-800 mb-2">
                   {auction.titulo}
                 </h3>
-
-                <button className="px-4 py-2 bg-gray-800 text-white font-serif rounded hover:bg-gray-900 transition">
+                <p className="text-gray-600 text-sm mb-4">
+                  {auction.descripcion}
+                </p>
+                <button
+                  onClick={() => navigate(`/expo/${auction.id}`)}
+                  className="w-full px-4 py-2 bg-gray-800 text-white font-serif rounded-lg hover:bg-gray-900 transition duration-300 shadow-md"
+                >
                   Ver Subasta
                 </button>
               </div>
@@ -62,7 +68,8 @@ export default function UpcomingAuctions() {
                 No hay exposiciones disponibles
               </h3>
               <p className="text-gray-600 text-center mt-2">
-                Actualmente no hay exposiciones activas. ¡Vuelve más tarde para descubrir nuevas obras!
+                Actualmente no hay exposiciones activas. ¡Vuelve más tarde para
+                descubrir nuevas obras!
               </p>
             </div>
           </div>

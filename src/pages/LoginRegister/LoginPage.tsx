@@ -3,10 +3,12 @@ import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { Login } from "../../api/UsersApi";
 import { useGlobalContext } from "../../hooks/useGlobalContext";
+import { FaEye, FaEyeSlash } from "react-icons/fa"; // Íconos para mostrar/ocultar contraseña
 
 const LoginPage: React.FC = () => {
   const { setUser } = useGlobalContext();
   const navigate = useNavigate();
+  const [showPassword, setShowPassword] = useState(false); // Estado para mostrar/ocultar contraseña
 
   const [form, setForm] = useState({
     email: "",
@@ -25,32 +27,25 @@ const LoginPage: React.FC = () => {
   // Maneja el envío del formulario
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    // Esto ve que los campos no vayan vacios
     if (!form.email || !form.password) {
       toast.warn("Todos los campos son obligatorios");
       return;
     }
     try {
-      // Intenta hacer el login
       const everyThingOk = await Login(form);
       if (!everyThingOk) {
-        toast.error("Algo salio mal");
+        toast.error("Algo salió mal");
         return;
       }
-      // Si el login es exitoso, muestra un mensaje de todo bien papu y redirige
       toast.success(
         "Bienvenido a la galería de arte " +
           (everyThingOk?.nombre || "") +
           ". Ten un buen día"
       );
-      //Esto lo setea para que este disponible en toda la app
       setUser(everyThingOk!);
-      //Setea el valor en el local storage y lo convierte a string porque el local storage solo recibe texto
       localStorage.setItem("userData", JSON.stringify(everyThingOk));
-      //te lleva al inicio (negro)
       navigate("/");
     } catch (error) {
-      // Captura el error y muestra el mensaje
       if (error instanceof Error) {
         toast.error(error.message || "Ups... Algo salió mal");
       } else {
@@ -90,6 +85,8 @@ const LoginPage: React.FC = () => {
               className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500"
             />
           </div>
+
+          {/* Campo de contraseña con botón de "ver contraseña" */}
           <div>
             <label
               htmlFor="password"
@@ -97,15 +94,26 @@ const LoginPage: React.FC = () => {
             >
               Contraseña
             </label>
-            <input
-              id="password"
-              name="password"
-              type="password"
-              value={form.password}
-              onChange={handleInputChange}
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500"
-            />
+            <div className="relative">
+              <input
+                id="password"
+                name="password"
+                type={showPassword ? "text" : "password"}
+                value={form.password}
+                onChange={handleInputChange}
+                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500 pr-10"
+              />
+              {/* Botón para mostrar/ocultar contraseña */}
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-600 hover:text-gray-800 transition-all duration-300"
+              >
+                {showPassword ? <FaEyeSlash size={18} /> : <FaEye size={18} />}
+              </button>
+            </div>
           </div>
+
           <button
             type="submit"
             className="w-full py-2 bg-gray-800 text-white rounded-md hover:bg-gray-900 transition"
