@@ -43,3 +43,14 @@ export interface ObraDTO {
   exposicion: number;
   propietario: number;
 }
+export interface Work {
+  id: number;
+  titulo: string;
+  estilo: string;
+  precioSalida: number;
+  imagenUrl: string;
+  artista: number;
+  propietario: number;
+  exposicion: number;
+  fechaCreacion: string;
+}

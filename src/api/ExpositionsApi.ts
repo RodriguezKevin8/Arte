@@ -1,5 +1,5 @@
 import axios, { isAxiosError } from "axios";
-import { Exposition, ObraDTO } from "../types";
+import { Exposition, ObraDTO, Work } from "../types";
 const API_URL = import.meta.env.VITE_BACKEND_URL;
 
 export async function getAllExpositions() {
@@ -54,6 +54,34 @@ export async function deleteObra(obraId: number) {
   } catch (error) {
     if (isAxiosError(error) && error.response) {
       throw new Error(error.response.data.error || "no se pudo borrar la obra");
+    }
+  }
+}
+
+export async function getobrasbypropietario(obraId: number) {
+  try {
+    const url = `${API_URL}/obras/propietario/${obraId}`;
+    const { data } = await axios<Work[]>(url);
+    return data;
+  } catch (error) {
+    if (isAxiosError(error) && error.response) {
+      throw new Error(
+        error.response.data.error || "no se encontraron exposiciones"
+      );
+    }
+  }
+}
+
+export async function getobrasbyartista(obraId: number) {
+  try {
+    const url = `${API_URL}/obras/artista/${obraId}`;
+    const { data } = await axios<Work[]>(url);
+    return data;
+  } catch (error) {
+    if (isAxiosError(error) && error.response) {
+      throw new Error(
+        error.response.data.error || "no se encontraron exposiciones"
+      );
     }
   }
 }

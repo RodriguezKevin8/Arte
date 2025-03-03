@@ -1,4 +1,3 @@
-// src/pages/HomePage.tsx
 import React from "react";
 import Carousel from "../components/Carousel";
 import SubastasSeccion from "../components/SubastasSeccion";
