@@ -32,3 +32,14 @@ export interface Exposition {
   fechaInauguracion: string;
   titulo: string;
 }
+
+export interface ObraDTO {
+  id: number;
+  titulo: string;
+  estilo: string;
+  precioSalida: number;
+  imagenUrl: string;
+  artista: Number;
+  exposicion: Number;
+  propietario: Number;
+}

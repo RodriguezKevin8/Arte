@@ -8,6 +8,7 @@ import AuthRouteProtection from "./helpers/AuthRouteProtection";
 import ProfilePage from "./pages/ProfilePage";
 import Obras from "./pages/Obras";
 import ObraDetail from "./pages/ObraDetail";
+import ObrasDeExpo from "./pages/ObrasDeExpo";
 
 export const router = createBrowserRouter([
   {
@@ -30,6 +31,10 @@ export const router = createBrowserRouter([
       {
         path: "/detalleobra",
         element: <ObraDetail />,
+      },
+      {
+        path: "expo/:id",
+        element: <ObrasDeExpo />,
       },
     ],
   },

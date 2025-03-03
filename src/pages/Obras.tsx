@@ -1,13 +1,15 @@
-// src/pages/Obras.tsx
 import { useEffect, useState } from "react";
-import AddExposition from "../components/modals/AddExposition"; // Asegúrate de importar el componente correctamente
+import { useNavigate } from "react-router-dom";
+import AddExposition from "../components/modals/AddExposition";
 import { useGlobalContext } from "../hooks/useGlobalContext";
 import { getAllExpositions } from "../api/ExpositionsApi";
 import { Exposition } from "../types";
 import { toast } from "react-toastify";
 
 export default function Obras() {
+  const navigate = useNavigate();
   const [expositions, setExpositions] = useState<Exposition[]>([]);
+
   useEffect(() => {
     try {
       const getExpositionsFromApi = async () => {
@@ -16,31 +18,22 @@ export default function Obras() {
           setExpositions(expos);
           return;
         }
-        toast.error("No pudimos obtener las imagenes");
+        toast.error("No pudimos obtener las imágenes");
       };
       getExpositionsFromApi();
     } catch (error) {
       console.error(error);
     }
-  }, [expositions]);
+  }, []);
 
   const { user } = useGlobalContext();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const openModal = () => {
-    setIsModalOpen(true);
-  };
-
-  const closeModal = () => {
-    setIsModalOpen(false);
-  };
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
 
   return (
-    // Usamos w-full y px-[30px] para tener un margen fijo de 30px en ambos lados
     <div className="w-full px-[100px] py-6 relative">
-      {/* Botón fijo para Agregar Exposiciones */}
-
-      {/* Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-800 opacity-80">
           <div className="bg-white p-8 rounded-lg shadow-2xl relative w-full max-w-lg">
@@ -55,7 +48,6 @@ export default function Obras() {
         </div>
       )}
 
-      {/* Sección para mostrar todas las exposiciones */}
       <div className="py-12">
         <header className="flex w-full ">
           {user.id !== 0 && (
@@ -68,18 +60,17 @@ export default function Obras() {
               </button>
             </div>
           )}
-
-          <h2 className="w-[75%]  text-3xl font-serif text-gray-800 text-center mb-8">
+          <h2 className="w-[75%] text-3xl font-serif text-gray-800 text-center mb-8">
             Exposiciones
           </h2>
         </header>
 
-        {/* Se establece grid con 3 columnas y gap de 10px */}
         <div className="grid grid-cols-3 gap-[60px] mt-5">
           {expositions.map((expo, i) => (
             <div
               key={expo.id}
-              className="bg-white shadow-md rounded-lg overflow-hidden transform transition duration-300 hover:scale-105 hover:shadow-2xl"
+              className="bg-white shadow-md rounded-lg overflow-hidden transform transition duration-300 hover:scale-105 hover:shadow-2xl cursor-pointer"
+              onClick={() => navigate(`/expo/${expo.id}`)}
             >
               <img
                 src={`https://picsum.photos/536/354?random=${i}`}
@@ -90,7 +81,7 @@ export default function Obras() {
                   {expo.titulo}
                 </h3>
                 <p className="text-gray-700 text-sm">{expo.descripcion}</p>
-                <div className="flex flex-col text-gray-500 ">
+                <div className="flex flex-col text-gray-500">
                   <small>Fecha de apertura: {expo.fechaInauguracion}</small>
                   <small>Fecha de cierre: {expo.fechaClausura}</small>
                 </div>
