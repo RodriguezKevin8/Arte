@@ -1,5 +1,5 @@
 // src/pages/ObraAuctionDetail.tsx
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 
 const ObraAuctionDetail: React.FC = () => {
   // Datos de ejemplo para la obra en subasta
@@ -12,8 +12,8 @@ const ObraAuctionDetail: React.FC = () => {
     artist: "Artista Ejemplo",
     year: "2023",
     dimensions: "100 x 150 cm",
-    buyNowPrice: 5000,      // Precio de compra inmediata
-    currentBid: 3000,       // Oferta actual de la subasta
+    buyNowPrice: 5000, // Precio de compra inmediata
+    currentBid: 3000, // Oferta actual de la subasta
     auctionEnd: "2025-03-01T20:00:00Z", // Fecha y hora de finalización de la subasta
   };
 
@@ -40,7 +40,7 @@ const ObraAuctionDetail: React.FC = () => {
   }, [obra.auctionEnd]);
 
   return (
-    <div className="min-h-screen bg-gray-100 p-6">
+    <div className="min-h-screen bg-gray-200 p-6">
       <div className="max-w-5xl mx-auto bg-white shadow-lg rounded-lg overflow-hidden">
         {/* Imagen destacada de la obra */}
         <img
@@ -71,10 +71,12 @@ const ObraAuctionDetail: React.FC = () => {
             <div className="flex flex-col sm:flex-row sm:justify-between items-center mb-6">
               <div className="mb-4 sm:mb-0">
                 <p className="text-xl text-gray-800">
-                  <span className="font-bold">Comprar Ahora:</span> ${obra.buyNowPrice}
+                  <span className="font-bold">Comprar Ahora:</span> $
+                  {obra.buyNowPrice}
                 </p>
                 <p className="text-lg text-gray-700">
-                  <span className="font-bold">Oferta Actual:</span> ${obra.currentBid}
+                  <span className="font-bold">Oferta Actual:</span> $
+                  {obra.currentBid}
                 </p>
               </div>
               <div>

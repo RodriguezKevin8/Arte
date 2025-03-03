@@ -35,7 +35,7 @@ export default function Obras() {
   const closeModal = () => setIsModalOpen(false);
 
   return (
-    <div className="w-full px-[100px] py-6 relative">
+    <div className="w-full px-[100px] py-6 relative bg-gray-200 min-h-[92vh]">
       {isModalOpen && (
         <AddExposition
           setExpositions={setExpositions}
@@ -43,7 +43,7 @@ export default function Obras() {
         />
       )}
 
-      <div className="py-12">
+      <div className="py-12 ">
         <header className="flex w-full">
           {user.id !== 0 && (
             <div className="w-auto flex justify-center py-2">
@@ -85,7 +85,6 @@ export default function Obras() {
               </div>
             ))
           ) : (
-            
             <div className="flex flex-col items-center justify-center mt-10 p-8 bg-gray-100 rounded-lg shadow-md">
               <FaExclamationTriangle className="text-gray-500 text-6xl mb-4" />
               <h3 className="text-2xl font-semibold text-gray-700">

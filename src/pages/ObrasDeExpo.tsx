@@ -105,7 +105,7 @@ export default function ObrasDeExpo() {
   };
 
   return (
-    <div className="w-full px-[100px] py-6 relative">
+    <div className="w-full px-[100px] py-6 relative  bg-gray-200 min-h-[92vh]">
       <div className="absolute top-6 right-6">
         <button
           onClick={openModal}
