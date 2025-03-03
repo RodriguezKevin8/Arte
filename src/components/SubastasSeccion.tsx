@@ -2,25 +2,29 @@ import { useEffect, useState } from "react";
 import { getAllExpositions } from "../api/ExpositionsApi";
 import { toast } from "react-toastify";
 import { Exposition } from "../types";
+import { FaExclamationTriangle } from "react-icons/fa";
 
 export default function UpcomingAuctions() {
-  // Función para calcular el tiempo restante
+  // Estado para almacenar las exposiciones
   const [expositions, setExpositions] = useState<Exposition[]>([]);
+
   useEffect(() => {
-    try {
-      const getExpositionsFromApi = async () => {
+    const getExpositionsFromApi = async () => {
+      try {
         const expos = await getAllExpositions();
-        if (expos) {
+        if (Array.isArray(expos) && expos.length > 0) {
           setExpositions(expos);
-          return;
+        } else {
+          toast.error("No se encontraron exposiciones");
         }
-        toast.error("No pudimos obtener las imagenes");
-      };
-      getExpositionsFromApi();
-    } catch (error) {
-      console.error(error);
-    }
-  }, [expositions]);
+      } catch (error) {
+        console.error("Error al obtener exposiciones:", error);
+        toast.error("Hubo un problema al cargar las exposiciones");
+      }
+    };
+
+    getExpositionsFromApi();
+  }, []); // Dependencia vacía para evitar bucles infinitos
 
   return (
     <div className="py-12 px-16 bg-white shadow-md rounded-lg my-8">
@@ -29,7 +33,7 @@ export default function UpcomingAuctions() {
       </h2>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
         {expositions.length > 0 ? (
-          expositions?.slice(-3).map((auction, i) => (
+          expositions.slice(-3).map((auction, i) => (
             <div
               key={auction.id}
               className="bg-gray-100 rounded-lg overflow-hidden shadow-lg"
@@ -51,9 +55,17 @@ export default function UpcomingAuctions() {
             </div>
           ))
         ) : (
-          <p className="text-2xl font-bold p-2">
-            No hay exposiciones disponibles :(
-          </p>
+          <div className="flex justify-center items-center h-[60vh]">
+            <div className="flex flex-col items-center justify-center p-8 bg-gray-100 rounded-lg shadow-md w-[400px]">
+              <FaExclamationTriangle className="text-gray-500 text-6xl mb-4" />
+              <h3 className="text-2xl font-semibold text-gray-700 text-center">
+                No hay exposiciones disponibles
+              </h3>
+              <p className="text-gray-600 text-center mt-2">
+                Actualmente no hay exposiciones activas. ¡Vuelve más tarde para descubrir nuevas obras!
+              </p>
+            </div>
+          </div>
         )}
       </div>
     </div>

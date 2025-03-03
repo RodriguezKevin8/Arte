@@ -46,14 +46,11 @@ export default function AddExposition({
       return;
     }
 
-    const newExposition = {
-      ...formData,
-    };
+    const newExposition = { ...formData };
 
     try {
       await createExpo(newExposition);
-      //Esto no creo que sea optimo asi que no lo hagan en otros lados, acá porque solo es para mostra
-      setExpositions([]);
+      setExpositions([]); // Limpia la lista (solo para mostrar)
       toast.success("Exposición creada correctamente");
       closeModal();
     } catch (error) {
@@ -63,30 +60,30 @@ export default function AddExposition({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-800/80">
-      <div className="bg-white p-6 md:p-8 rounded-2xl shadow-2xl relative w-full max-w-lg">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-md animate-fadeIn">
+      <div className="bg-white p-8 rounded-2xl shadow-2xl w-full max-w-lg transform scale-95 animate-scaleIn">
         {/* Header */}
-        <div className="flex justify-between items-center mb-4">
-          <h2 className="text-2xl font-bold text-gray-800">
+        <div className="flex justify-between items-center mb-6">
+          <h2 className="text-2xl font-bold text-gray-900">
             Agregar Nueva Exposición
           </h2>
           <button
             onClick={closeModal}
-            className="text-gray-600 hover:text-red-500 text-2xl transition"
+            className="text-gray-600 hover:text-red-500 transition duration-300 text-2xl"
           >
             <AiOutlineClose />
           </button>
         </div>
 
         {/* Formulario */}
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-6">
           <div>
-            <label className="block text-gray-700 font-medium">
+            <label className="block text-gray-700 font-medium mb-1">
               Nombre de la exposición
             </label>
             <input
               type="text"
-              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:outline-none transition-all"
               placeholder="Ej: Obras maestras del Renacimiento"
               name="titulo"
               value={formData.titulo}
@@ -95,11 +92,11 @@ export default function AddExposition({
             />
           </div>
           <div>
-            <label className="block text-gray-700 font-medium">
+            <label className="block text-gray-700 font-medium mb-1">
               Descripción
             </label>
             <textarea
-              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:outline-none resize-none transition-all"
               placeholder="Descripción de la exposición"
               name="descripcion"
               value={formData.descripcion}
@@ -107,39 +104,41 @@ export default function AddExposition({
               required
             />
           </div>
-          <div>
-            <label className="block text-gray-700 font-medium">
-              Fecha de Inauguración
-            </label>
-            <input
-              type="date"
-              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              name="fechaInauguracion"
-              value={formData.fechaInauguracion}
-              onChange={handleChange}
-              required
-            />
-          </div>
-          <div>
-            <label className="block text-gray-700 font-medium">
-              Fecha de Clausura
-            </label>
-            <input
-              type="date"
-              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              name="fechaClausura"
-              value={formData.fechaClausura}
-              onChange={handleChange}
-              required
-            />
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="block text-gray-700 font-medium mb-1">
+                Fecha de Inauguración
+              </label>
+              <input
+                type="date"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:outline-none transition-all"
+                name="fechaInauguracion"
+                value={formData.fechaInauguracion}
+                onChange={handleChange}
+                required
+              />
+            </div>
+            <div>
+              <label className="block text-gray-700 font-medium mb-1">
+                Fecha de Clausura
+              </label>
+              <input
+                type="date"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:outline-none transition-all"
+                name="fechaClausura"
+                value={formData.fechaClausura}
+                onChange={handleChange}
+                required
+              />
+            </div>
           </div>
 
           {/* Botón */}
           <button
             type="submit"
-            className="flex items-center justify-center w-full bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition text-lg font-medium"
+            className="flex items-center justify-center w-full bg-gray-800 text-white px-4 py-3 rounded-lg hover:bg-gray-900 transition-all duration-300 text-lg font-medium shadow-md"
           >
-            <AiOutlineCheck className="mr-2 text-xl" /> Guardar
+            <AiOutlineCheck className="mr-2 text-xl" /> Guardar Exposición
           </button>
         </form>
       </div>
