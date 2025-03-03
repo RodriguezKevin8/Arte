@@ -30,3 +30,30 @@ export async function getObrasByExposicion(id: number) {
     }
   }
 }
+
+export async function createObra(formData: FormData) {
+  try {
+    const url = `${API_URL}/obras`;
+    const { data } = await axios<ObraDTO>(url, {
+      method: "POST",
+      data: formData,
+    });
+    return data;
+  } catch (error) {
+    if (isAxiosError(error) && error.response) {
+      console.log(error.response.data);
+      throw new Error(error.response.data.error || "no se pudo crear la obra");
+    }
+  }
+}
+
+export async function deleteObra(obraId: number) {
+  try {
+    const url = `${API_URL}/obras/${obraId}`;
+    await axios(url, { method: "DELETE" });
+  } catch (error) {
+    if (isAxiosError(error) && error.response) {
+      throw new Error(error.response.data.error || "no se pudo borrar la obra");
+    }
+  }
+}
