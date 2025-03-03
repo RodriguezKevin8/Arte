@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import {
   getObrasByExposicion,
   createObra,
@@ -9,6 +9,7 @@ import { ObraDTO } from "../types";
 import { useGlobalContext } from "../hooks/useGlobalContext";
 import { toast } from "react-toastify";
 import { AiOutlineClose, AiOutlineCheck } from "react-icons/ai";
+import { FaExclamationTriangle } from "react-icons/fa";
 
 interface FormDataType {
   titulo: string;
@@ -21,6 +22,7 @@ interface FormDataType {
 }
 
 export default function ObrasDeExpo() {
+  const navigate = useNavigate();
   const { user } = useGlobalContext();
   const { id } = useParams<{ id: string }>();
   const [obras, setObras] = useState<ObraDTO[]>([]);
@@ -34,8 +36,6 @@ export default function ObrasDeExpo() {
     artista: String(user.id),
     imagen: null,
   });
-
-  console.log("datos a revisar", user.id);
 
   useEffect(() => {
     fetchObras();
@@ -209,6 +209,7 @@ export default function ObrasDeExpo() {
             obras.map((obra, i) => (
               <div
                 key={obra.id}
+                onClick={() => navigate(`/obra/${obra.id}`)}
                 className="bg-white shadow-md rounded-lg overflow-hidden transform transition duration-300 hover:scale-105 hover:shadow-2xl cursor-pointer flex flex-col"
               >
                 <img
@@ -239,6 +240,7 @@ export default function ObrasDeExpo() {
             ))
           ) : (
             <div className="flex flex-col items-center justify-center mt-10 p-8 bg-gray-100 rounded-lg shadow-md">
+              <FaExclamationTriangle className="text-gray-500 text-6xl mb-4" />
               <h3 className="text-2xl font-semibold text-gray-700">
                 No hay obras disponibles
               </h3>

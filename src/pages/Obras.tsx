@@ -29,7 +29,7 @@ export default function Obras() {
     };
 
     getExpositionsFromApi();
-  }, []);
+  }, [expositions]);
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);

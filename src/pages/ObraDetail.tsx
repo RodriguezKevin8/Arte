@@ -1,102 +1,144 @@
-// src/pages/ObraAuctionDetail.tsx
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
+import { getObraDetail } from "../api/ObraApi";
+import { getOfferts } from "../api/ObraApi";
+import { useParams } from "react-router-dom";
+import { toast } from "react-toastify";
+import { ObraDeArteDetalladaType, OfertaType } from "../types";
+import { FaMoneyBillTrendUp } from "react-icons/fa6";
+import AddSubastamodal from "../components/modals/AddSubastamodal";
 
 const ObraAuctionDetail: React.FC = () => {
-  // Datos de ejemplo para la obra en subasta
-  const obra = {
-    id: 1,
-    title: "Obra Maestra en Subasta",
-    description:
-      "Esta obra representa la fusión de la tradición con la modernidad. Con técnicas mixtas y un enfoque vanguardista, el artista explora el contraste entre la luz y la sombra, evocando emociones profundas y reflexiones sobre la existencia.",
-    imageUrl: "https://picsum.photos/id/1020/1200/800",
-    artist: "Artista Ejemplo",
-    year: "2023",
-    dimensions: "100 x 150 cm",
-    buyNowPrice: 5000, // Precio de compra inmediata
-    currentBid: 3000, // Oferta actual de la subasta
-    auctionEnd: "2025-03-01T20:00:00Z", // Fecha y hora de finalización de la subasta
-  };
-
-  // Estado para el contador de la subasta
-  const [timeLeft, setTimeLeft] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [offerts, setOfferts] = useState<OfertaType[]>([]); // Array de ofertas para la subasta
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
+  const [obra, setObra] = useState<ObraDeArteDetalladaType | null>(null);
+  const { id } = useParams();
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      const now = new Date().getTime();
-      const endTime = new Date(obra.auctionEnd).getTime();
-      const diff = endTime - now;
-      if (diff <= 0) {
-        setTimeLeft("Finalizada");
-        clearInterval(interval);
-      } else {
-        const hours = Math.floor(diff / (1000 * 60 * 60));
-        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-        const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-        setTimeLeft(`${hours}h ${minutes}m ${seconds}s`);
-      }
-    }, 1000);
+    const getObraData = async () => {
+      try {
+        if (!id) {
+          toast.error("ID de obra no válido");
+          return;
+        }
 
-    return () => clearInterval(interval);
-  }, [obra.auctionEnd]);
+        const result = await getObraDetail(id);
+        if (result) {
+          setObra(result);
+        } else {
+          toast.error("Obra no encontrada");
+        }
+      } catch (error) {
+        console.error("Error al obtener la obra", error);
+        toast.error("Hubo un error al cargar la obra.");
+      }
+    };
+    const getOffertsFromApi = async () => {
+      try {
+        if (!id) {
+          toast.error("ID de obra no válido");
+          return;
+        }
+
+        const result = await getOfferts(+id);
+        if (result) {
+          setOfferts(result);
+        } else {
+          toast.error("Obra no encontrada");
+        }
+      } catch (error) {
+        console.error("Error al obtener las ofertas de la obra", error);
+        toast.error("Hubo un error al cargar las ofertas de la obra.");
+      }
+    };
+
+    getObraData();
+    getOffertsFromApi();
+  }, [id]);
+
+  if (!obra) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-200 p-6">
+        <p className="text-gray-700 text-lg">No se encontró la obra.</p>
+      </div>
+    );
+  }
 
   return (
-    <div className="min-h-screen bg-gray-200 p-6">
+    <main className="min-h-screen bg-gray-200 p-6">
+      {isModalOpen && (
+        <AddSubastamodal
+          closeModal={closeModal}
+          precioSalida={obra.precioSalida}
+        />
+      )}
       <div className="max-w-5xl mx-auto bg-white shadow-lg rounded-lg overflow-hidden">
         {/* Imagen destacada de la obra */}
         <img
-          src={obra.imageUrl}
-          alt={obra.title}
+          src={obra.imagenUrl}
+          alt={obra.titulo}
           className="w-full h-96 object-cover"
         />
-        <div className="p-8">
+        <article className="p-8">
           {/* Título y descripción */}
           <h1 className="text-4xl font-serif text-gray-800 mb-4">
-            {obra.title}
+            {obra.titulo}
           </h1>
-          <p className="text-gray-600 mb-6">{obra.description}</p>
+          <p className="text-gray-600 mb-6">{obra.estilo}</p>
           {/* Datos adicionales */}
           <div className="flex flex-col sm:flex-row sm:justify-between text-gray-700 mb-6">
             <p>
-              <span className="font-bold">Artista:</span> {obra.artist}
+              <span className="font-bold">Artista:</span> {obra.artistaNombre}
             </p>
             <p>
-              <span className="font-bold">Año:</span> {obra.year}
+              <span className="font-bold">Fecha de Creación:</span>{" "}
+              {new Date(obra.fechaCreacion).toLocaleDateString()}
             </p>
             <p>
-              <span className="font-bold">Dimensiones:</span> {obra.dimensions}
+              <span className="font-bold">Precio de Salida:</span> $
+              {obra.precioSalida}
             </p>
           </div>
           {/* Sección de subasta */}
-          <div className="border-t pt-6">
-            <div className="flex flex-col sm:flex-row sm:justify-between items-center mb-6">
-              <div className="mb-4 sm:mb-0">
-                <p className="text-xl text-gray-800">
-                  <span className="font-bold">Comprar Ahora:</span> $
-                  {obra.buyNowPrice}
-                </p>
-                <p className="text-lg text-gray-700">
-                  <span className="font-bold">Oferta Actual:</span> $
-                  {obra.currentBid}
-                </p>
-              </div>
-              <div>
-                <p className="text-lg text-gray-700">
-                  <span className="font-bold">Finaliza en:</span> {timeLeft}
-                </p>
-              </div>
-            </div>
-            <div className="flex flex-col sm:flex-row sm:justify-center gap-4">
-              <button className="bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition-colors">
-                Comprar Ahora
-              </button>
-              <button className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors">
-                Participar en Subasta
-              </button>
-            </div>
-          </div>
-        </div>
+          <section className="border-t pt-6">
+            <button
+              onClick={openModal}
+              className="bg-gray-600 flex gap-4  text-white px-6 py-3 rounded-lg hover:bg-gray-700 transition-colors"
+            >
+              Participar en Subasta <FaMoneyBillTrendUp size={20} />
+            </button>
+            {offerts.length > 0 ? (
+              <>
+                <h2 className="text-center text-2xl font-bold p-3">
+                  Ofertas de la obra
+                </h2>
+                <table className=" border-2">
+                  <thead>
+                    <tr>
+                      <th>Nombre</th>
+                      <th>Monto</th>
+                      <th>Fecha en que se hizo</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {offerts.map((offert) => (
+                      <tr key={offert.usuario}>
+                        <td>{offert.usuario}</td>
+                        <td>{offert.monto}</td>
+                        <td>{offert.fechaOferta}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </>
+            ) : (
+              <p>No hay ofertas... aún</p>
+            )}
+          </section>
+        </article>
       </div>
-    </div>
+    </main>
   );
 };
 

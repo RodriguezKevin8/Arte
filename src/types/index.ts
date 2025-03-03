@@ -32,7 +32,7 @@ export interface Exposition {
   fechaInauguracion: string;
   titulo: string;
 }
-
+//Las obras
 export interface ObraDTO {
   id: number;
   titulo: string;
@@ -43,3 +43,34 @@ export interface ObraDTO {
   exposicion: number;
   propietario: number;
 }
+
+export type ObraDeArte = {
+  id: number;
+  titulo: string;
+  estilo: string;
+  precioSalida: number;
+  imagenUrl: string;
+  artista: number;
+  exposicion: number;
+  fechaCreacion: string;
+  propietario: number;
+};
+export type ObraDeArteDetalladaType = {
+  id: number;
+  titulo: string;
+  estilo: string;
+  precioSalida: number;
+  imagenUrl: string;
+  artistaId: number;
+  artistaNombre: string;
+  artistaEmail: string;
+  fechaCreacion: string; // O `Date` si lo conviertes antes
+};
+
+// type de oferta
+export type OfertaType = {
+  fechaOferta: string;
+  monto: number;
+  obra: number;
+  usuario: number;
+};

@@ -30,7 +30,7 @@ const RegisterPage: React.FC = () => {
     const everythingOk = await createUser(form);
     if (everythingOk) {
       toast.success("Usuario creado correctamente");
-      navigate("/");
+      navigate("/auth/login");
       return;
     }
     toast.error("No se pudo crear el usuario");
