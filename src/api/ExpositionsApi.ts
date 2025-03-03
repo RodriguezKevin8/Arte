@@ -6,7 +6,6 @@ export async function getAllExpositions() {
   try {
     const url = `${API_URL}/exposicions`;
     const { data } = await axios<Exposition[]>(url);
-    console.log(data);
     return data;
   } catch (error) {
     if (isAxiosError(error) && error.response) {

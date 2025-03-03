@@ -24,7 +24,7 @@ export default function Obras() {
     } catch (error) {
       console.error(error);
     }
-  }, []);
+  }, [expositions]);
 
   const { user } = useGlobalContext();
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -35,17 +35,10 @@ export default function Obras() {
   return (
     <div className="w-full px-[100px] py-6 relative">
       {isModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-800 opacity-80">
-          <div className="bg-white p-8 rounded-lg shadow-2xl relative w-full max-w-lg">
-            <button
-              onClick={closeModal}
-              className="absolute top-2 right-2 text-white hover:text-gray-700 text-2xl"
-            >
-              &times;
-            </button>
-            <AddExposition setExpositions={setExpositions} />
-          </div>
-        </div>
+        <AddExposition
+          setExpositions={setExpositions}
+          closeModal={closeModal}
+        />
       )}
 
       <div className="py-12">

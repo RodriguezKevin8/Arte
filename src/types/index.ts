@@ -39,7 +39,7 @@ export interface ObraDTO {
   estilo: string;
   precioSalida: number;
   imagenUrl: string;
-  artista: Number;
-  exposicion: Number;
-  propietario: Number;
+  artista: number;
+  exposicion: number;
+  propietario: number;
 }
