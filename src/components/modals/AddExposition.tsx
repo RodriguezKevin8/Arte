@@ -1,6 +1,7 @@
 import { useState, ChangeEvent, FormEvent } from "react";
 import { createExpo } from "../../api/UsersApi";
 import { toast } from "react-toastify";
+import { Exposition } from "../../types";
 
 interface ExpositionFormData {
   titulo: string;
@@ -8,8 +9,13 @@ interface ExpositionFormData {
   fechaInauguracion: string;
   fechaClausura: string;
 }
+type AddExpositionModalProps = {
+  setExpositions: React.Dispatch<React.SetStateAction<Exposition[]>>;
+};
 
-export default function AddExposition() {
+export default function AddExposition({
+  setExpositions,
+}: AddExpositionModalProps) {
   const [formData, setFormData] = useState<ExpositionFormData>({
     titulo: "",
     descripcion: "",
@@ -43,6 +49,8 @@ export default function AddExposition() {
 
     try {
       await createExpo(newExposition);
+      //Esto no creo que sea optimo asi que no lo hagan en otros lados, acá porque solo es para mostra
+      setExpositions([]);
       toast.success("Exposición creada correctamente");
     } catch (error) {
       console.error("Error al crear la exposición:", error);

@@ -23,3 +23,12 @@ export type expo = {
   fechaInauguracion: string;
   fechaClausura: string;
 };
+//Tipos de exposiciones
+
+export interface Exposition {
+  id: number;
+  descripcion: string;
+  fechaClausura: string;
+  fechaInauguracion: string;
+  titulo: string;
+}

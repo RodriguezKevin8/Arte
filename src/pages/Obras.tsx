@@ -1,56 +1,31 @@
 // src/pages/Obras.tsx
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import AddExposition from "../components/modals/AddExposition"; // Asegúrate de importar el componente correctamente
-
-interface Exposition {
-  id: number;
-  title: string;
-  description: string;
-  imageUrl: string;
-}
+import { useGlobalContext } from "../hooks/useGlobalContext";
+import { getAllExpositions } from "../api/ExpositionsApi";
+import { Exposition } from "../types";
+import { toast } from "react-toastify";
 
 export default function Obras() {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [expositions, setExpositions] = useState<Exposition[]>([]);
+  useEffect(() => {
+    try {
+      const getExpositionsFromApi = async () => {
+        const expos = await getAllExpositions();
+        if (expos) {
+          setExpositions(expos);
+          return;
+        }
+        toast.error("No pudimos obtener las imagenes");
+      };
+      getExpositionsFromApi();
+    } catch (error) {
+      console.error(error);
+    }
+  }, [expositions]);
 
-  // Datos de ejemplo para las exposiciones (6 elementos)
-  const expositions: Exposition[] = [
-    {
-      id: 1,
-      title: "Exposición Moderna",
-      description: "Descubre lo último en arte moderno.",
-      imageUrl: "https://picsum.photos/id/1011/400/300",
-    },
-    {
-      id: 2,
-      title: "Clásicos del Renacimiento",
-      description: "Una colección de obras maestras del Renacimiento.",
-      imageUrl: "https://picsum.photos/id/1020/400/300",
-    },
-    {
-      id: 3,
-      title: "Arte Contemporáneo",
-      description: "Exposición de artistas emergentes y contemporáneos.",
-      imageUrl: "https://picsum.photos/id/1035/400/300",
-    },
-    {
-      id: 4,
-      title: "Fotografía en Blanco y Negro",
-      description: "Capturando la esencia en contraste.",
-      imageUrl: "https://picsum.photos/id/1043/400/300",
-    },
-    {
-      id: 5,
-      title: "Exposición Abstracta",
-      description: "Explora el mundo abstracto.",
-      imageUrl: "https://picsum.photos/id/1055/400/300",
-    },
-    {
-      id: 6,
-      title: "Exposición Minimalista",
-      description: "Menos es más en esta exposición.",
-      imageUrl: "https://picsum.photos/id/1065/400/300",
-    },
-  ];
+  const { user } = useGlobalContext();
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -64,11 +39,10 @@ export default function Obras() {
     // Usamos w-full y px-[30px] para tener un margen fijo de 30px en ambos lados
     <div className="w-full px-[100px] py-6 relative">
       {/* Botón fijo para Agregar Exposiciones */}
-      
 
       {/* Modal */}
       {isModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-800 bg-opacity-80">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-800 opacity-80">
           <div className="bg-white p-8 rounded-lg shadow-2xl relative w-full max-w-lg">
             <button
               onClick={closeModal}
@@ -76,7 +50,7 @@ export default function Obras() {
             >
               &times;
             </button>
-            <AddExposition />
+            <AddExposition setExpositions={setExpositions} />
           </div>
         </div>
       )}
@@ -84,38 +58,42 @@ export default function Obras() {
       {/* Sección para mostrar todas las exposiciones */}
       <div className="py-12">
         <header className="flex w-full ">
+          {user.id !== 0 && (
+            <div className="w-auto flex justify-center py-2">
+              <button
+                onClick={openModal}
+                className="bg-gray-800 text-white px-6 py-3 rounded-lg hover:bg-gray-900 transition-colors shadow-md"
+              >
+                Agregar Exposiciones
+              </button>
+            </div>
+          )}
 
-        <div className="w-auto flex justify-center py-2" >
-        <button
-          onClick={openModal}
-          className="bg-gray-800 text-white px-6 py-3 rounded-lg hover:bg-gray-900 transition-colors shadow-md"
-        >
-          Agregar Exposiciones
-        </button>
-      </div>
-        <h2 className="w-[75%]  text-3xl font-serif text-gray-800 text-center mb-8">
-          Exposiciones
-        </h2>
-
+          <h2 className="w-[75%]  text-3xl font-serif text-gray-800 text-center mb-8">
+            Exposiciones
+          </h2>
         </header>
-      
+
         {/* Se establece grid con 3 columnas y gap de 10px */}
         <div className="grid grid-cols-3 gap-[60px] mt-5">
-          {expositions.map((expo) => (
+          {expositions.map((expo, i) => (
             <div
               key={expo.id}
               className="bg-white shadow-md rounded-lg overflow-hidden transform transition duration-300 hover:scale-105 hover:shadow-2xl"
             >
               <img
-                src={expo.imageUrl}
-                alt={expo.title}
-                className="w-full h-64 object-cover"
+                src={`https://picsum.photos/536/354?random=${i}`}
+                alt="imagen"
               />
               <div className="p-4">
                 <h3 className="font-serif text-xl text-gray-800 mb-2">
-                  {expo.title}
+                  {expo.titulo}
                 </h3>
-                <p className="text-gray-600 text-sm">{expo.description}</p>
+                <p className="text-gray-700 text-sm">{expo.descripcion}</p>
+                <div className="flex flex-col text-gray-500 ">
+                  <small>Fecha de apertura: {expo.fechaInauguracion}</small>
+                  <small>Fecha de cierre: {expo.fechaClausura}</small>
+                </div>
               </div>
             </div>
           ))}
