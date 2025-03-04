@@ -13,7 +13,7 @@ import { FaMoneyBillTrendUp } from "react-icons/fa6";
 import AddSubastamodal from "../components/modals/AddSubastamodal";
 import { useGlobalContext } from "../hooks/useGlobalContext";
 
-const ObraAuctionDetail: React.FC = () => {
+const DetallesVenta: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [offerts, setOfferts] = useState<OfertariosType[]>([]);
   const openModal = () => setIsModalOpen(true);
@@ -174,100 +174,10 @@ const ObraAuctionDetail: React.FC = () => {
               {obra.precioSalida}
             </p>
           </div>
-
-          <section className="border-t pt-6">
-            {user.id !== obra.artistaId ? (
-              !isAuctionClosed ? (
-                <>
-                  <div className="mb-4">
-                    <p className="font-semibold">Tiempo restante:</p>
-                    <div className="text-4xl font-bold text-teal-600">
-                      {formatTime(timeRemaining)}
-                    </div>
-                  </div>
-                  {hasUserOffer ? (
-                    <p className="text-green-600 font-semibold">
-                      Ya hiciste una oferta en esta obra, pero si quieres
-                      cambiarla, elimínala y haz una nueva.
-                    </p>
-                  ) : (
-                    <button
-                      onClick={openModal}
-                      className="bg-gray-600 flex gap-4 text-white px-6 py-3 rounded-lg hover:bg-gray-700 transition-colors"
-                    >
-                      Participar en Subasta <FaMoneyBillTrendUp size={20} />
-                    </button>
-                  )}
-                </>
-              ) : (
-                <p className="text-red-600 font-semibold">No más ofertas</p>
-              )
-            ) : (
-              <p className="text-xl">Elige una de las propuestas a tu obra</p>
-            )}
-
-            {offerts.length > 0 ? (
-              <>
-                <h2 className="text-center text-2xl font-bold p-3">
-                  Ofertas de la obra
-                </h2>
-                <table className="w-full mt-4 border-collapse shadow-md rounded-lg overflow-hidden">
-                  <thead>
-                    <tr className="bg-gray-700 text-white text-left">
-                      <th className="px-6 py-3">Nombre</th>
-                      <th className="px-6 py-3">Monto</th>
-                      <th className="px-6 py-3">Fecha de Oferta</th>
-                      <th className="px-6 py-3">Acciones</th>
-                    </tr>
-                  </thead>
-
-                  <tbody>
-                    {offerts.map((offert, index) => (
-                      <tr
-                        key={offert.usuarioNombre}
-                        className={`${
-                          index % 2 === 0 ? "bg-gray-100" : "bg-white"
-                        } hover:bg-gray-300 transition-colors`}
-                      >
-                        <td className="px-6 py-4">{offert.usuarioNombre}</td>
-                        <td className="px-6 py-4 font-bold text-green-600">
-                          ${offert.monto.toLocaleString()}
-                        </td>
-                        <td className="px-6 py-4 text-gray-500">
-                          {new Date(offert.fechaOferta).toLocaleDateString()}
-                        </td>
-                        <td className="px-6 py-4">
-                          {user.id === obra.artistaId ? (
-                            <button
-                              onClick={() => handleAcceptOffer(offert)}
-                              className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors"
-                            >
-                              Aceptar propuesta
-                            </button>
-                          ) : user.id === offert.usuarioId ? (
-                            <button
-                              onClick={() => handleDeleteOffer(offert.id)}
-                              className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors"
-                            >
-                              Eliminar mi oferta
-                            </button>
-                          ) : (
-                            <p>No hay acciones</p>
-                          )}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </>
-            ) : (
-              <p>No hay ofertas... aún</p>
-            )}
-          </section>
         </article>
       </div>
     </main>
   );
 };
 
-export default ObraAuctionDetail;
+export default DetallesVenta;

@@ -9,6 +9,8 @@ import ProfilePage from "./pages/ProfilePage";
 import Obras from "./pages/Obras";
 import ObraDetail from "./pages/ObraDetail";
 import ObrasDeExpo from "./pages/ObrasDeExpo";
+import DetallesVenta from "./pages/DetallesVenta";
+import DetalleVenta2 from "./pages/DetalleVenta2";
 
 export const router = createBrowserRouter([
   {
@@ -39,6 +41,14 @@ export const router = createBrowserRouter([
       {
         path: "obra/:id",
         element: <ObraDetail />,
+      },
+      {
+        path: "obraventa/:id",
+        element: <DetallesVenta />,
+      },
+      {
+        path: "obraventap/:id",
+        element: <DetalleVenta2 />,
       },
     ],
   },

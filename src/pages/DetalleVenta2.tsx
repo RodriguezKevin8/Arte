@@ -13,7 +13,7 @@ import { FaMoneyBillTrendUp } from "react-icons/fa6";
 import AddSubastamodal from "../components/modals/AddSubastamodal";
 import { useGlobalContext } from "../hooks/useGlobalContext";
 
-const ObraAuctionDetail: React.FC = () => {
+const DetalleVenta2: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [offerts, setOfferts] = useState<OfertariosType[]>([]);
   const openModal = () => setIsModalOpen(true);
@@ -203,7 +203,7 @@ const ObraAuctionDetail: React.FC = () => {
                 <p className="text-red-600 font-semibold">No más ofertas</p>
               )
             ) : (
-              <p className="text-xl">Elige una de las propuestas a tu obra</p>
+              <p className="text-xl"></p>
             )}
 
             {offerts.length > 0 ? (
@@ -217,7 +217,7 @@ const ObraAuctionDetail: React.FC = () => {
                       <th className="px-6 py-3">Nombre</th>
                       <th className="px-6 py-3">Monto</th>
                       <th className="px-6 py-3">Fecha de Oferta</th>
-                      <th className="px-6 py-3">Acciones</th>
+                      <th className="px-6 py-3"></th>
                     </tr>
                   </thead>
 
@@ -236,25 +236,7 @@ const ObraAuctionDetail: React.FC = () => {
                         <td className="px-6 py-4 text-gray-500">
                           {new Date(offert.fechaOferta).toLocaleDateString()}
                         </td>
-                        <td className="px-6 py-4">
-                          {user.id === obra.artistaId ? (
-                            <button
-                              onClick={() => handleAcceptOffer(offert)}
-                              className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors"
-                            >
-                              Aceptar propuesta
-                            </button>
-                          ) : user.id === offert.usuarioId ? (
-                            <button
-                              onClick={() => handleDeleteOffer(offert.id)}
-                              className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors"
-                            >
-                              Eliminar mi oferta
-                            </button>
-                          ) : (
-                            <p>No hay acciones</p>
-                          )}
-                        </td>
+                        <td className="px-6 py-4"></td>
                       </tr>
                     ))}
                   </tbody>
@@ -270,4 +252,4 @@ const ObraAuctionDetail: React.FC = () => {
   );
 };
 
-export default ObraAuctionDetail;
+export default DetalleVenta2;

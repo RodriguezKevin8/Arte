@@ -1,13 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, use } from "react";
 import { useGlobalContext } from "../hooks/useGlobalContext";
 import { toast } from "react-toastify";
 import { updateUser } from "../api/UsersApi";
-import { FaUser, FaEnvelope, FaLock, FaEdit } from "react-icons/fa";
+import { FaUser, FaEnvelope, FaLock, FaEdit, FaBookmark } from "react-icons/fa";
 import { UpdateUserType, Work } from "../types";
-//import logo from "/logoart.jpg";
-import { FaExclamationTriangle } from "react-icons/fa";
+import logo from "/logoart.jpg";
 import { useNavigate } from "react-router-dom";
-
+import { FaExclamationTriangle } from "react-icons/fa";
 import {
   getobrasbyartista,
   getobrasbypropietario,
@@ -266,7 +265,7 @@ export default function ProfilePage() {
                       <p className="text-sm text-gray-500">{obra.estilo}</p>
                     </div>
                     <button
-                      onClick={() => navigate(`/obra/${obra.id}`)}
+                      onClick={() => navigate(`/obraventap/${obra.id}`)}
                       className="bg-gray-800 text-white px-3 py-2 rounded-lg hover:bg-gray-900 transition-colors"
                     >
                       Ver
@@ -307,7 +306,7 @@ export default function ProfilePage() {
                       <p className="text-sm text-gray-500">{obra.estilo}</p>
                     </div>
                     <button
-                      onClick={() => navigate(`/obra/${obra.id}`)}
+                      onClick={() => navigate(`/obraventa/${obra.id}`)}
                       className="bg-gray-800 text-white px-3 py-2 rounded-lg hover:bg-gray-900 transition-colors"
                     >
                       Ver
