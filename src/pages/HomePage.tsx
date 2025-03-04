@@ -1,7 +1,6 @@
 import React from "react";
 import Carousel from "../components/Carousel";
 import SubastasSeccion from "../components/SubastasSeccion";
-import Footer from "../components/Footer";
 
 const HomePage: React.FC = () => {
   const heroImage = "https://picsum.photos/id/1018/1600/900";
@@ -114,7 +113,6 @@ const HomePage: React.FC = () => {
           ))}
         </div>
       </div>
-      <Footer />
     </div>
   );
 };
