@@ -91,6 +91,19 @@ export default function ObrasDeExpo() {
       toast.success("Obra creada correctamente");
       closeModal();
       fetchObras();
+
+      // Limpiar campos después de crear la obra
+      setFormData({
+        titulo: "",
+        estilo: "",
+        precioSalida: "",
+        exposicion: String(id),
+        propietario: String(user.id),
+        artista: String(user.id),
+        imagen: null,
+      });
+
+      setIsCheckboxChecked(false);
     } catch (error) {
       console.log("Error al crear la obra", error);
       toast.error("Error al crear la obra");
