@@ -37,14 +37,14 @@ export default function UpcomingAuctions() {
           expositions.slice(-3).map((auction, i) => (
             <div
               key={auction.id}
-              className="bg-gray-100 rounded-lg overflow-hidden shadow-lg"
+              className="bg-gray-100 rounded-lg overflow-hidden shadow-lg flex flex-col"
             >
               <img
                 src={`https://picsum.photos/536/354?random=${i}`}
                 alt={auction.titulo}
                 className="w-full h-48 object-cover"
               />
-              <div className="p-4">
+              <div className="p-6 flex flex-col flex-grow">
                 <h3 className="font-serif text-xl text-gray-800 mb-2">
                   {auction.titulo}
                 </h3>
@@ -53,7 +53,7 @@ export default function UpcomingAuctions() {
                 </p>
                 <button
                   onClick={() => navigate(`/expo/${auction.id}`)}
-                  className="w-full px-4 py-2 bg-gray-800 text-white font-serif rounded-lg hover:bg-gray-900 transition duration-300 shadow-md"
+                  className="mt-auto w-full px-4 py-2 bg-gray-800 text-white font-serif rounded-lg hover:bg-gray-900 transition duration-300 shadow-md"
                 >
                   Ver Exposición
                 </button>

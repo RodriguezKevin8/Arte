@@ -188,20 +188,33 @@ export default function ObrasDeExpo() {
       )}
 
       <div className="py-12">
-        <header className="flex w-full items-center">
-          {user.id !== 0 && (
-            <div className="w-auto flex justify-center py-2">
-              <button
-                onClick={openModal}
-                className="bg-gray-800 text-white px-6 py-3 rounded-lg hover:bg-gray-900 transition-colors shadow-md"
-              >
-                Agregar tu obra de arte
-              </button>
-            </div>
-          )}
-          <h2 className="w-[75%] text-3xl font-serif text-gray-800 text-center mb-8">
+        <header className="flex items-center w-full">
+          {/* Sección Izquierda: Botón Agregar Obra (si el usuario está logueado)  */}
+          <div className="flex-1">
+            <button
+              onClick={openModal}
+              className="bg-gray-800 text-white px-6 py-3 rounded-lg hover:bg-gray-900 transition-colors shadow-md"
+            >
+              Agregar tu obra de arte
+            </button>
+          </div>
+
+          {/* Sección Central: Título */}
+          <h2 className="flex-1 text-3xl font-serif text-gray-800 text-center mb-8">
             Obras de la Exposición
           </h2>
+
+          {/* Sección Derecha: Botón Volver */}
+          <div className="flex-1 flex justify-end">
+            {user.id !== 0 && (
+              <button
+                onClick={() => navigate(-1)}
+                className="bg-gray-800 text-white px-6 py-3 rounded-lg hover:bg-gray-900 transition-colors shadow-md"
+              >
+                Volver
+              </button>
+            )}
+          </div>
         </header>
 
         <div className="grid grid-cols-3 gap-[60px] mt-5">
@@ -229,7 +242,10 @@ export default function ObrasDeExpo() {
                   </p>
                   {obra.propietario === user.id && (
                     <button
-                      onClick={() => handleDelete(obra.id)}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleDelete(obra.id);
+                      }}
                       className="mt-auto bg-red-400 text-white px-4 py-2 rounded-md hover:bg-red-700 transition duration-300 w-full"
                     >
                       Eliminar obra

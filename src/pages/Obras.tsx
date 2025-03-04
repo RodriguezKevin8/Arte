@@ -43,10 +43,10 @@ export default function Obras() {
         />
       )}
 
-      <div className="py-12 ">
-        <header className="flex w-full">
+      <div className="py-12">
+        <header className="flex items-center w-full">
           {user.id !== 0 && (
-            <div className="w-auto flex justify-center py-2">
+            <div className="w-auto flex justify-center py-2 mr-4">
               <button
                 onClick={openModal}
                 className="bg-gray-800 text-white px-6 py-3 rounded-lg hover:bg-gray-900 transition-colors shadow-md"
@@ -55,9 +55,18 @@ export default function Obras() {
               </button>
             </div>
           )}
-          <h2 className="w-[75%] text-3xl font-serif text-gray-800 text-center mb-8">
+
+          <h2 className="flex-1 text-3xl font-serif text-gray-800 text-center mb-8">
             Exposiciones
           </h2>
+
+          {/* Botón Volver */}
+          <button
+            onClick={() => navigate(-1)}
+            className="bg-gray-800 text-white px-6 py-3 rounded-lg hover:bg-gray-900 transition-colors shadow-md"
+          >
+            Volver
+          </button>
         </header>
 
         <div className="grid grid-cols-3 gap-[60px] mt-5">
