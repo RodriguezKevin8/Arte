@@ -23,15 +23,16 @@ export default function ProfilePage() {
   const [artis, setArtist] = useState<Work[]>([]);
 
   useEffect(() => {
-    if (!user.id) {
-      toast.error("Usuario no encontrado.");
-      return;
-    }
+    if (!user || !user.id) return;
+    setForm({
+      nombre: user.nombre,
+      email: user.email,
+      password: "",
+    });
 
     const fetchWorks = async () => {
       try {
         const data = await getobrasbypropietario(user.id);
-        console.log("ojito", user.id);
         if (data) {
           setWorks(data);
           console.log("propietarios", data);
@@ -108,7 +109,7 @@ export default function ProfilePage() {
       <div className="relative -mt-16 max-w-2xl w-full bg-white shadow-2xl rounded-lg border border-gray-200 p-6">
         <div className="absolute -top-12 left-1/2 transform -translate-x-1/2">
           <img
-            src={`https://picsum.photos/200/200?random=${user.id}`}
+            src={`/logoart.jpg`}
             alt="Avatar"
             className="w-24 h-24 object-cover rounded-full border-4 border-white shadow-md"
           />
