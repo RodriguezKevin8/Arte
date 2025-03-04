@@ -6,7 +6,7 @@ import {
   getObraDetail,
 } from "../api/ObraApi";
 import { getOfferts } from "../api/ObraApi";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { ObraDeArteDetalladaType, OfertariosType } from "../types";
 import { FaMoneyBillTrendUp } from "react-icons/fa6";
@@ -15,7 +15,7 @@ import { useGlobalContext } from "../hooks/useGlobalContext";
 
 const ObraAuctionDetail: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [offerts, setOfferts] = useState<OfertariosType[]>([]); // Array de ofertas para la subasta
+  const [offerts, setOfferts] = useState<OfertariosType[]>([]);
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
   const [obra, setObra] = useState<ObraDeArteDetalladaType | null>(null);
@@ -23,6 +23,11 @@ const ObraAuctionDetail: React.FC = () => {
   const { user } = useGlobalContext();
   const hasUserOffer = offerts.some((offer) => offer.usuarioId === user.id);
   const [refresh, setRefresh] = useState(0);
+
+  // Agregar el estado para la validación del tiempo
+  const [isAuctionClosed, setIsAuctionClosed] = useState(false);
+  const [timeRemaining, setTimeRemaining] = useState(0); // Tiempo restante en milisegundos
+  const navigate = useNavigate();
 
   const handleDeleteOffer = async (id: number) => {
     try {
@@ -34,6 +39,7 @@ const ObraAuctionDetail: React.FC = () => {
       toast.error("Hubo un error al eliminar tu oferta :(");
     }
   };
+
   const handleAcceptOffer = async (offert: OfertariosType) => {
     const paymentData = {
       estado: "Comprado",
@@ -48,11 +54,13 @@ const ObraAuctionDetail: React.FC = () => {
         changeOwner({ obraID: +id!, propietarioId: offert.usuarioId }),
       ]);
       toast.success("Oferta aceptada correctamente");
+      navigate("/obras");
     } catch (error) {
       console.error(error);
       toast.error("Hubo un error al aceptar la oferta");
     }
   };
+
   useEffect(() => {
     const getObraData = async () => {
       try {
@@ -64,6 +72,29 @@ const ObraAuctionDetail: React.FC = () => {
         const result = await getObraDetail(id);
         if (result) {
           setObra(result);
+          // Calcular el tiempo de finalización de la subasta (2 minutos después de la fecha de creación)
+          const fechaCreacion = new Date(result.fechaCreacion);
+          const fechaLimite = new Date(fechaCreacion.getTime() + 2 * 60 * 1000); // 2 minutos después
+
+          // Comparar el tiempo actual con la fecha límite
+          if (new Date() > fechaLimite) {
+            setIsAuctionClosed(true); // La subasta ya terminó
+          } else {
+            // Establecer el tiempo restante
+            setTimeRemaining(fechaLimite.getTime() - new Date().getTime());
+            // Iniciar un intervalo para actualizar el tiempo restante
+            const interval = setInterval(() => {
+              setTimeRemaining((prevTime) => {
+                const newTime = prevTime - 1000;
+                if (newTime <= 0) {
+                  clearInterval(interval);
+                  setIsAuctionClosed(true); // Finaliza la subasta cuando el tiempo se acaba
+                }
+                return newTime;
+              });
+            }, 1000); // Actualizar cada segundo
+            return () => clearInterval(interval); // Limpiar el intervalo cuando el componente se desmonte
+          }
         } else {
           toast.error("Obra no encontrada");
         }
@@ -72,6 +103,7 @@ const ObraAuctionDetail: React.FC = () => {
         toast.error("Hubo un error al cargar la obra.");
       }
     };
+
     const getOffertsFromApi = async () => {
       try {
         if (!id) {
@@ -95,6 +127,12 @@ const ObraAuctionDetail: React.FC = () => {
     getOffertsFromApi();
   }, [id, refresh]);
 
+  const formatTime = (time: number) => {
+    const minutes = Math.floor(time / 60000);
+    const seconds = Math.floor((time % 60000) / 1000);
+    return `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
+  };
+
   if (!obra) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-200 p-6">
@@ -113,19 +151,16 @@ const ObraAuctionDetail: React.FC = () => {
         />
       )}
       <div className="max-w-5xl mx-auto bg-white shadow-lg rounded-lg overflow-hidden">
-        {/* Imagen destacada de la obra */}
         <img
           src={obra.imagenUrl}
           alt={obra.titulo}
           className="w-full h-96 object-cover"
         />
         <article className="p-8">
-          {/* Título y descripción */}
           <h1 className="text-4xl font-serif text-gray-800 mb-4">
             {obra.titulo}
           </h1>
           <p className="text-gray-600 mb-6">{obra.estilo}</p>
-          {/* Datos adicionales */}
           <div className="flex flex-col sm:flex-row sm:justify-between text-gray-700 mb-6">
             <p>
               <span className="font-bold">Artista:</span> {obra.artistaNombre}
@@ -139,21 +174,33 @@ const ObraAuctionDetail: React.FC = () => {
               {obra.precioSalida}
             </p>
           </div>
-          {/* Sección de subasta */}
+
           <section className="border-t pt-6">
             {user.id !== obra.artistaId ? (
-              hasUserOffer ? (
-                <p className="text-green-600 font-semibold">
-                  Ya hiciste una oferta en esta obra, pero si quieres cambiarla,
-                  elimínala y haz una nueva.
-                </p>
+              !isAuctionClosed ? (
+                <>
+                  <div className="mb-4">
+                    <p className="font-semibold">Tiempo restante:</p>
+                    <div className="text-4xl font-bold text-teal-600">
+                      {formatTime(timeRemaining)}
+                    </div>
+                  </div>
+                  {hasUserOffer ? (
+                    <p className="text-green-600 font-semibold">
+                      Ya hiciste una oferta en esta obra, pero si quieres
+                      cambiarla, elimínala y haz una nueva.
+                    </p>
+                  ) : (
+                    <button
+                      onClick={openModal}
+                      className="bg-gray-600 flex gap-4 text-white px-6 py-3 rounded-lg hover:bg-gray-700 transition-colors"
+                    >
+                      Participar en Subasta <FaMoneyBillTrendUp size={20} />
+                    </button>
+                  )}
+                </>
               ) : (
-                <button
-                  onClick={openModal}
-                  className="bg-gray-600 flex gap-4 text-white px-6 py-3 rounded-lg hover:bg-gray-700 transition-colors"
-                >
-                  Participar en Subasta <FaMoneyBillTrendUp size={20} />
-                </button>
+                <p className="text-red-600 font-semibold">No más ofertas</p>
               )
             ) : (
               <p className="text-xl">Elige una de las propuestas a tu obra</p>
@@ -191,7 +238,6 @@ const ObraAuctionDetail: React.FC = () => {
                         </td>
                         <td className="px-6 py-4">
                           {user.id === obra.artistaId ? (
-                            // El dueño de la obra puede aceptar propuestas
                             <button
                               onClick={() => handleAcceptOffer(offert)}
                               className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors"
@@ -199,7 +245,6 @@ const ObraAuctionDetail: React.FC = () => {
                               Aceptar propuesta
                             </button>
                           ) : user.id === offert.usuarioId ? (
-                            // Si el usuario hizo esta oferta, puede eliminarla
                             <button
                               onClick={() => handleDeleteOffer(offert.id)}
                               className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors"
