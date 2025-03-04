@@ -150,6 +150,16 @@ const DetallesVenta: React.FC = () => {
           setRefresh={setRefresh}
         />
       )}
+      <div className="flex-1 flex justify-end">
+        {user.id !== 0 && (
+          <button
+            onClick={() => navigate(-1)}
+            className="bg-gray-800 text-white px-6 py-3 rounded-lg hover:bg-gray-900 transition-colors shadow-md"
+          >
+            Volver
+          </button>
+        )}
+      </div>
       <div className="max-w-5xl mx-auto bg-white shadow-lg rounded-lg overflow-hidden">
         <img
           src={obra.imagenUrl}
