@@ -36,6 +36,7 @@ export default function ObrasDeExpo() {
     artista: String(user.id),
     imagen: null,
   });
+  const [isCheckboxChecked, setIsCheckboxChecked] = useState(false);
 
   useEffect(() => {
     fetchObras();
@@ -91,6 +92,7 @@ export default function ObrasDeExpo() {
       closeModal();
       fetchObras();
     } catch (error) {
+      console.log("Error al crear la obra", error);
       toast.error("Error al crear la obra");
     }
   };
@@ -103,6 +105,10 @@ export default function ObrasDeExpo() {
     } catch (error) {
       toast.error("Error al eliminar la obra");
     }
+  };
+
+  const handleCheckboxChange = () => {
+    setIsCheckboxChecked((prev) => !prev);
   };
 
   return (
@@ -174,10 +180,34 @@ export default function ObrasDeExpo() {
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:outline-none transition-all"
                 />
               </div>
+
+              {/* Checkbox y mensaje */}
+              <div className="flex items-center space-x-2">
+                <input
+                  type="checkbox"
+                  id="accept-checkbox"
+                  checked={isCheckboxChecked}
+                  onChange={handleCheckboxChange}
+                  className="h-5 w-5 text-gray-600"
+                />
+                <label
+                  htmlFor="accept-checkbox"
+                  className="text-gray-700 text-sm"
+                >
+                  Acepto los términos y condiciones.
+                </label>
+              </div>
+              <div className="mt-2 text-red-500 text-sm">
+                Esta obra no se puede modificar por motivos de seguridad.
+              </div>
+
               <div className="flex justify-end space-x-4">
                 <button
                   type="submit"
-                  className="flex items-center justify-center w-full bg-gray-800 text-white px-4 py-3 rounded-lg hover:bg-gray-900 transition-all duration-300 text-lg font-medium shadow-md"
+                  className={`flex items-center justify-center w-full bg-gray-800 text-white px-4 py-3 rounded-lg hover:bg-gray-900 transition-all duration-300 text-lg font-medium shadow-md ${
+                    !isCheckboxChecked ? "opacity-50 cursor-not-allowed" : ""
+                  }`}
+                  disabled={!isCheckboxChecked}
                 >
                   <AiOutlineCheck className="mr-2 text-xl" /> Agregar
                 </button>

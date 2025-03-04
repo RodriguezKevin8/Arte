@@ -1,9 +1,22 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Carousel from "../components/Carousel";
 import SubastasSeccion from "../components/SubastasSeccion";
 
+interface Artwork {
+  id: number;
+  titulo: string;
+  estilo: string;
+  precioSalida: number;
+  imagenUrl: string;
+  exposicion: number | null;
+  fechaCreacion: string; // Fecha en formato ISO
+}
+
 const HomePage: React.FC = () => {
   const heroImage = "https://picsum.photos/id/1018/1600/900";
+  const [artworks, setArtworks] = useState<Artwork[]>([]);
+  const navigate = useNavigate();
 
   const featuredArtworks = [
     {
@@ -23,38 +36,15 @@ const HomePage: React.FC = () => {
     },
   ];
 
-  const moreArtworks = [
-    {
-      id: 4,
-      title: "Obra Maestra 4",
-      imageUrl: "https://picsum.photos/id/1050/800/600",
-    },
-    {
-      id: 5,
-      title: "Obra Maestra 5",
-      imageUrl: "https://picsum.photos/id/1060/800/600",
-    },
-    {
-      id: 6,
-      title: "Obra Maestra 6",
-      imageUrl: "https://picsum.photos/id/1070/800/600",
-    },
-    {
-      id: 7,
-      title: "Obra Maestra 7",
-      imageUrl: "https://picsum.photos/id/1080/800/600",
-    },
-    {
-      id: 8,
-      title: "Obra Maestra 8",
-      imageUrl: "https://picsum.photos/id/1090/800/600",
-    },
-    {
-      id: 9,
-      title: "Obra Maestra 9",
-      imageUrl: "https://picsum.photos/id/110/800/600",
-    },
-  ];
+  useEffect(() => {
+    fetch("http://localhost:8080/api/obras")
+      .then((response) => response.json())
+      .then((data: Artwork[]) => {
+        const filteredArtworks = data.filter((art) => art.exposicion !== null);
+        setArtworks(filteredArtworks);
+      })
+      .catch((error) => console.error("Error fetching artworks:", error));
+  }, []);
 
   return (
     <div className="min-h-screen bg-gray-200">
@@ -73,45 +63,81 @@ const HomePage: React.FC = () => {
         </div>
       </div>
 
-      {/* Sección de Obras Destacadas: Carousel */}
       <div className="py-12 px-16">
         <h2 className="text-3xl font-serif text-gray-800 text-center mb-8">
           Obras Destacadas
         </h2>
-        <Carousel artworks={featuredArtworks} />
+        <Carousel artworks={featuredArtworks.slice(0, 3)} />
       </div>
 
-      {/* Sección de Próximas Subastas */}
       <SubastasSeccion />
 
-      {/* Sección en Grid de Obras */}
       <div className="py-12 px-16">
         <h2 className="text-3xl font-serif text-gray-800 text-center mb-8">
           Más Obras
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {moreArtworks.map((art) => (
-            <div
-              key={art.id}
-              className="bg-white shadow-lg rounded-lg overflow-hidden m-8 transform transition duration-300 hover:scale-105 hover:shadow-2xl"
-            >
-              <img
-                src={art.imageUrl}
-                alt={art.title}
-                className="w-full h-48 object-cover"
-              />
-              <div className="p-4">
-                <h3 className="font-serif text-xl text-gray-800 mb-2">
-                  {art.title}
-                </h3>
-                <p className="text-gray-600 text-sm">
-                  Una descripción breve de la obra que resalta sus
-                  características.
-                </p>
-              </div>
-            </div>
+          {artworks.map((art) => (
+            <ArtworkCard key={art.id} art={art} navigate={navigate} />
           ))}
         </div>
+      </div>
+    </div>
+  );
+};
+
+const ArtworkCard: React.FC<{ art: Artwork; navigate: any }> = ({
+  art,
+  navigate,
+}) => {
+  const [timeLeft, setTimeLeft] = useState("");
+
+  useEffect(() => {
+    const updateCountdown = () => {
+      const fechaCreacion = new Date(art.fechaCreacion);
+      const fechaCierre = new Date(fechaCreacion.getTime() + 2 * 60 * 1000); // Sumar 2 minutos
+      const ahora = new Date();
+      const diferencia = fechaCierre.getTime() - ahora.getTime();
+
+      if (diferencia > 0) {
+        const minutos = Math.floor(diferencia / (1000 * 60));
+        const segundos = Math.floor((diferencia % (1000 * 60)) / 1000);
+        setTimeLeft(`${minutos}:${segundos < 10 ? "0" : ""}${segundos}`);
+      } else {
+        setTimeLeft("Subasta finalizada");
+      }
+    };
+
+    updateCountdown(); // Llamado inicial
+    const interval = setInterval(updateCountdown, 1000); // Actualizar cada segundo
+
+    return () => clearInterval(interval);
+  }, [art.fechaCreacion]);
+
+  return (
+    <div
+      key={art.id}
+      className="bg-white shadow-lg rounded-lg overflow-hidden m-8 transform transition duration-300 hover:scale-105 hover:shadow-2xl cursor-pointer"
+      onClick={() => navigate(`/obra/${art.id}`)}
+    >
+      <img
+        src={art.imagenUrl}
+        alt={art.titulo}
+        className="w-full h-48 object-cover"
+      />
+      <div className="p-4">
+        <h3 className="font-serif text-xl text-gray-800 mb-2">{art.titulo}</h3>
+        <p className="text-gray-600 text-sm">{art.estilo}</p>
+        <p className="text-gray-800 font-bold">${art.precioSalida}</p>
+        <p
+          className={`mt-2 text-lg font-bold ${
+            timeLeft === "Subasta finalizada"
+              ? "text-red-500"
+              : "text-green-500"
+          }`}
+        >
+          {timeLeft}
+        </p>
       </div>
     </div>
   );
