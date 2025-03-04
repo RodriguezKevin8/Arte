@@ -1,9 +1,10 @@
-import React, { useState, useEffect, use } from "react";
+import React, { useState, useEffect } from "react";
 import { useGlobalContext } from "../hooks/useGlobalContext";
 import { toast } from "react-toastify";
 import { updateUser } from "../api/UsersApi";
-import { FaUser, FaEnvelope, FaLock, FaEdit, FaBookmark } from "react-icons/fa";
+import { FaUser, FaEnvelope, FaLock, FaEdit } from "react-icons/fa";
 import { UpdateUserType, Work } from "../types";
+import logo from "/logoart.jpg";
 import {
   getobrasbyartista,
   getobrasbypropietario,

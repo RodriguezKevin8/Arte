@@ -73,3 +73,19 @@ export type OfertaType = {
   obra: number;
   usuario: number;
 };
+export type OfertariosType = {
+  fechaOferta: string;
+  id: number;
+  monto: number;
+  obra: number;
+  usuarioId: number;
+  usuarioNombre: string;
+};
+export type PaymentType = {
+  id: number;
+  estado: string;
+  fechaPago: string;
+  monto: number;
+  usuario: number;
+};
+export type CreatePaymentType = Omit<PaymentType, "id">;

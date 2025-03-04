@@ -6,12 +6,14 @@ import { makeAnOffert } from "../../api/ObraApi";
 
 type AddSubastaModalProps = {
   precioSalida: number;
+  setRefresh: React.Dispatch<React.SetStateAction<number>>;
   closeModal: () => void;
 };
 
 export default function AddSubastaModal({
   closeModal,
   precioSalida,
+  setRefresh,
 }: AddSubastaModalProps) {
   const [monto, setMonto] = useState("");
   const { id: obra_id } = useParams();
@@ -37,6 +39,7 @@ export default function AddSubastaModal({
       const newOffert = await makeAnOffert(oferta);
       if (newOffert) {
         toast.success("La oferta se realizó correctamente.");
+        setRefresh(1);
         closeModal();
         return;
       }
